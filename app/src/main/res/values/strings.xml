@@ -1,5 +1,10 @@
 <resources>
 
     <string name="app_name">Watchlist</string>
+    
+    <!-- Navigation Bar Titles -->
+    <string name="navigation_bar_search_title">Search</string>
+    <string name="navigation_bar_explore_title">Explore</string>
+    <string name="navigation_bar_saved_title">Saved</string>
 
 </resources>
