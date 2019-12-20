@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!-- Base Application Colors -->
     <color name="colorPrimary">#C90606</color>
     <color name="colorPrimaryDark">#A50000</color>
     <color name="colorAccent">#2979FF</color>
-
 </resources>
