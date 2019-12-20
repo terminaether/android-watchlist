@@ -5,4 +5,8 @@
     <string name="navigation_bar_explore_title">Explore</string>
     <string name="navigation_bar_saved_title">Saved</string>
     <string name="navigation_bar_trailers_title">Trailers</string>
+
+    <!-- Tab Item Titles -->
+    <string name="tab_item_movies">Movies</string>
+    <string name="tab_item_shows">Shows</string>
 </resources>

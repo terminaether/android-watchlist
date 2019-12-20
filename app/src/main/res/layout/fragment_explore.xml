@@ -17,6 +17,27 @@
             android:layout_height="wrap_content"
             app:title="@string/navigation_bar_explore_title" />
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tl_explore_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabGravity="fill"
+            app:tabMode="fixed">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/ti_movies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_item_movies" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/ti_shows"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_item_shows" />
+
+        </com.google.android.material.tabs.TabLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
