@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 /**
- * Contains instructions on how to construct various network objects.`
+ * Contains instructions on how to construct various network objects.
  *
  * Created by terminaether on 2019-12-31.
  */
