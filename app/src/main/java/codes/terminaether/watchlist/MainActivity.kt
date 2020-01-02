@@ -3,7 +3,7 @@ package codes.terminaether.watchlist
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import codes.terminaether.watchlist.feature.explore.ui.ExploreFragment
+import codes.terminaether.watchlist.feature.discover.ui.DiscoverFragment
 import codes.terminaether.watchlist.feature.saved.ui.SavedFragment
 import codes.terminaether.watchlist.feature.trailers.ui.TrailersFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,11 +19,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        loadFragment(ExploreFragment())
+        loadFragment(DiscoverFragment())
         bottom_nav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.explore -> {
-                    loadFragment(ExploreFragment())
+                R.id.discover -> {
+                    loadFragment(DiscoverFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
 

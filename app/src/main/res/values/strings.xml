@@ -2,7 +2,7 @@
     <string name="app_name">Watchlist</string>
     
     <!-- Navigation Bar Titles -->
-    <string name="navigation_bar_explore_title">Explore</string>
+    <string name="navigation_bar_discover_title">Discover</string>
     <string name="navigation_bar_saved_title">Saved</string>
     <string name="navigation_bar_trailers_title">Trailers</string>
 

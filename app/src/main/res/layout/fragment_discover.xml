@@ -15,10 +15,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="@string/navigation_bar_explore_title" />
+            app:title="@string/navigation_bar_discover_title" />
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tl_explore_fragment"
+            android:id="@+id/tl_discover_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabGravity="fill"
@@ -44,6 +44,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="Explore" />
+        android:text="Discover" />
 
 </LinearLayout>

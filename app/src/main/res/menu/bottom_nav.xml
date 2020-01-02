@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/explore"
-        android:icon="@drawable/ic_explore"
-        android:title="@string/navigation_bar_explore_title" />
+        android:id="@+id/discover"
+        android:icon="@drawable/ic_discover"
+        android:title="@string/navigation_bar_discover_title" />
 
     <item
         android:id="@+id/saved"
