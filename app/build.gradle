@@ -18,7 +18,9 @@ android {
 
     buildTypes {
         dev {
+            debuggable true
             minifyEnabled true
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             Properties properties = new Properties()
