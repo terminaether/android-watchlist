@@ -1,5 +1,7 @@
 package codes.terminaether.watchlist.data.model
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * A data class describing a Movie, as per The Movie Database.
  *
@@ -15,6 +17,7 @@ data class Movie(
      * The path parameter to be supplied to `https://image.tmdb.org/t/p/{size}/{path}' in order to
      * get this Movie's backdrop.
      */
+    @SerializedName("backdrop_path")
     val backdropPath: String?,
 
     /**
@@ -35,10 +38,13 @@ data class Movie(
     /**
      * 9 character ID with pattern ^tt[0-9]{7}.
      */
+    @SerializedName("imdb_id")
     val imdbId: String?,
 
+    @SerializedName("original_language")
     val originalLanguage: String?,
 
+    @SerializedName("original_title")
     val originalTitle: String?,
 
     val overview: String?,
@@ -52,11 +58,13 @@ data class Movie(
      * The path parameter to be supplied to `https://image.tmdb.org/t/p/{size}/{path}' in order to
      * get this Movie's poster.
      */
+    @SerializedName("poster_path")
     val posterPath: String?,
 
     /**
      * Release date, formatted as YYYY-MM-DD.
      */
+    @SerializedName("release_date")
     val releaseDate: String?,
 
     /**
@@ -87,10 +95,12 @@ data class Movie(
     /**
      * The average user rating, from 0.0 to 10.0.
      */
+    @SerializedName("vote_average")
     val voteAverage: Number?,
 
     /**
      * The number of individual votes/ratings cast on this Movie.
      */
+    @SerializedName("vote_count")
     val voteCount: Int?
 )
