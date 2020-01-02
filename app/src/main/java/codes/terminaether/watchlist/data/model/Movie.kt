@@ -3,7 +3,7 @@ package codes.terminaether.watchlist.data.model
 import com.google.gson.annotations.SerializedName
 
 /**
- * A data class describing a Movie, as per The Movie Database.
+ * A data class describing a Movie, as per TMDb.
  *
  * Created by terminaether on 2019-12-24.
  */
