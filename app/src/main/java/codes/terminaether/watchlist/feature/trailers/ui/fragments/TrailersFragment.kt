@@ -1,4 +1,4 @@
-package codes.terminaether.watchlist.feature.trailers.ui
+package codes.terminaether.watchlist.feature.trailers.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

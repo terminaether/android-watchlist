@@ -3,9 +3,9 @@ package codes.terminaether.watchlist
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import codes.terminaether.watchlist.feature.discover.ui.DiscoverFragment
-import codes.terminaether.watchlist.feature.saved.ui.SavedFragment
-import codes.terminaether.watchlist.feature.trailers.ui.TrailersFragment
+import codes.terminaether.watchlist.feature.discover.ui.fragments.DiscoverFragment
+import codes.terminaether.watchlist.feature.saved.ui.fragments.SavedFragment
+import codes.terminaether.watchlist.feature.trailers.ui.fragments.TrailersFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**

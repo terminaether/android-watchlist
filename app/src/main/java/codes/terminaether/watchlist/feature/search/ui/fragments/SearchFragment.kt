@@ -1,4 +1,4 @@
-package codes.terminaether.watchlist.feature.saved.ui
+package codes.terminaether.watchlist.feature.search.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,19 +8,19 @@ import androidx.fragment.app.Fragment
 import codes.terminaether.watchlist.R
 
 /**
- * The Saved screen allows users to view a list of titles they have saved to their watchlist. The
- * screen is separated into two lists containing Movies and TV Shows.
+ * The Search screen allows users to search TMDb for Movies and TV Shows, which are returned as a
+ * single list.
  *
  * Created by terminaether on 2019-12-19.
  */
-class SavedFragment : Fragment() {
+class SearchFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_saved, container, false)
+        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
 }
