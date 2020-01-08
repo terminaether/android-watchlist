@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * TODO: Add file description.
+ * ViewModel to store and manage Discover data.
  *
  * Created by terminaether on 2020-01-06.
  */
