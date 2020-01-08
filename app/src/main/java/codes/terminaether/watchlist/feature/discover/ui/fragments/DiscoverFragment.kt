@@ -11,7 +11,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import codes.terminaether.watchlist.R
 import codes.terminaether.watchlist.data.model.ApiResult
-import codes.terminaether.watchlist.feature.discover.data.model.DiscoverMoviesResponse
+import codes.terminaether.watchlist.data.model.Movie
+import codes.terminaether.watchlist.feature.discover.data.model.DiscoverResponse
 import codes.terminaether.watchlist.feature.discover.data.repo.DiscoverRepository
 import codes.terminaether.watchlist.feature.discover.ui.viewmodels.DiscoverViewModel
 
@@ -48,12 +49,12 @@ class DiscoverFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         discoverViewModel.discoverMoviesResult.observe(
             viewLifecycleOwner,
-            Observer<ApiResult<DiscoverMoviesResponse>> { this.handleDiscoverMoviesData(it) })
+            Observer<ApiResult<DiscoverResponse<Movie>>> { this.handleDiscoverMoviesData(it) })
         discoverViewModel.fetchMovies()
     }
 
-    private fun handleDiscoverMoviesData(discoverMoviesResponse: ApiResult<DiscoverMoviesResponse>) {
-        when (discoverMoviesResponse) {
+    private fun handleDiscoverMoviesData(discoverResponse: ApiResult<DiscoverResponse<Movie>>) {
+        when (discoverResponse) {
             is ApiResult.Success -> Log.d("Attention", "API Success")
             is ApiResult.Error -> Log.d("Attention", "API Error")
         }

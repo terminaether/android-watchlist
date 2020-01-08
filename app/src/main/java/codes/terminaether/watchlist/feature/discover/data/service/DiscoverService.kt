@@ -1,6 +1,7 @@
 package codes.terminaether.watchlist.feature.discover.data.service
 
-import codes.terminaether.watchlist.feature.discover.data.model.DiscoverMoviesResponse
+import codes.terminaether.watchlist.data.model.Movie
+import codes.terminaether.watchlist.feature.discover.data.model.DiscoverResponse
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.GET
@@ -12,5 +13,5 @@ import retrofit2.http.GET
  */
 interface DiscoverService {
     @GET("discover/movie")
-    fun discoverMovies(): Deferred<Response<DiscoverMoviesResponse>>
+    fun discoverMovies(): Deferred<Response<DiscoverResponse<Movie>>>
 }

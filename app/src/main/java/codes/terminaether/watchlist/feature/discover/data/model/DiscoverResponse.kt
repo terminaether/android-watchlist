@@ -1,6 +1,5 @@
 package codes.terminaether.watchlist.feature.discover.data.model
 
-import codes.terminaether.watchlist.data.model.Movie
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -8,18 +7,18 @@ import com.google.gson.annotations.SerializedName
  *
  * Created by terminaether on 2020-01-02.
  */
-data class DiscoverMoviesResponse(
+data class DiscoverResponse<T>(
     /**
      * This response's page number.
      */
     val page: Int,
 
     /**
-     * Note: The Movie objects in this response are incomplete. For a movie's full details, a call
-     * should be made to `/movie/{movie_id}`.
+     * Note: The Movie/Show objects in this response are incomplete. For a movie's full details, a
+     * call should be made to `/movie/{movie_id}` or `/tv/{tv_id}`.
      */
     @SerializedName("results")
-    val movies: List<Movie>,
+    val movies: List<T>,
 
     @SerializedName("total_results")
     val totalResults: Int,

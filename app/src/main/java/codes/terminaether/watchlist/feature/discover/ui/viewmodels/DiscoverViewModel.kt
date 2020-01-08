@@ -4,7 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import codes.terminaether.watchlist.data.model.ApiResult
-import codes.terminaether.watchlist.feature.discover.data.model.DiscoverMoviesResponse
+import codes.terminaether.watchlist.data.model.Movie
+import codes.terminaether.watchlist.feature.discover.data.model.DiscoverResponse
 import codes.terminaether.watchlist.feature.discover.data.repo.DiscoverRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +18,7 @@ import javax.inject.Inject
  */
 class DiscoverViewModel @Inject constructor(private val repo: DiscoverRepository) : ViewModel() {
 
-    val discoverMoviesResult = MutableLiveData<ApiResult<DiscoverMoviesResponse>>()
+    val discoverMoviesResult = MutableLiveData<ApiResult<DiscoverResponse<Movie>>>()
 
     fun fetchMovies() {
         viewModelScope.launch(Dispatchers.IO) {
