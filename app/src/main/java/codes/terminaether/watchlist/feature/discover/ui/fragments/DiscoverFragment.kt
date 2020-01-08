@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import codes.terminaether.watchlist.R
 import codes.terminaether.watchlist.data.model.ApiResult
 import codes.terminaether.watchlist.data.model.Movie
+import codes.terminaether.watchlist.data.model.Show
 import codes.terminaether.watchlist.feature.discover.data.model.DiscoverResponse
 import codes.terminaether.watchlist.feature.discover.data.repo.DiscoverRepository
 import codes.terminaether.watchlist.feature.discover.ui.viewmodels.DiscoverViewModel
@@ -51,12 +52,30 @@ class DiscoverFragment : Fragment() {
             viewLifecycleOwner,
             Observer<ApiResult<DiscoverResponse<Movie>>> { this.handleDiscoverMoviesData(it) })
         discoverViewModel.fetchMovies()
+
+        discoverViewModel.discoverShowsResult.observe(
+            viewLifecycleOwner,
+            Observer<ApiResult<DiscoverResponse<Show>>> { this.handleDiscoverShowsData(it) })
+        discoverViewModel.fetchShows()
     }
 
     private fun handleDiscoverMoviesData(discoverResponse: ApiResult<DiscoverResponse<Movie>>) {
         when (discoverResponse) {
-            is ApiResult.Success -> Log.d("Attention", "API Success")
-            is ApiResult.Error -> Log.d("Attention", "API Error")
+            is ApiResult.Success -> {
+                Log.d("Attention", "API Success: Movies")
+                Log.d("Attention", "First Movie Result: " + discoverResponse.data!!.movies[0].title)
+            }
+            is ApiResult.Error -> Log.d("Attention", "API Error: Movies")
+        }
+    }
+
+    private fun handleDiscoverShowsData(discoverResponse: ApiResult<DiscoverResponse<Show>>) {
+        when (discoverResponse) {
+            is ApiResult.Success -> {
+                Log.d("Attention", "API Success: Shows")
+                Log.d("Attention", "First Show Result: " + discoverResponse.data!!.movies[0].name)
+            }
+            is ApiResult.Error -> Log.d("Attention", "API Error: Shows")
         }
     }
 
