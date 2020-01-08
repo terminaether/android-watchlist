@@ -42,6 +42,10 @@ data class Movie(
     @SerializedName("imdb_id")
     val imdbId: String?,
 
+    /**
+     * ISO 639-1 code.
+     * @see [List of ISO 639-1 Codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+     */
     @SerializedName("original_language")
     val originalLanguage: String?,
 
