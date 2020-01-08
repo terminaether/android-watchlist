@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 /**
  * A data class describing a Movie, as per TMDb.
+ * @see [Movie Details](https://developers.themoviedb.org/3/movies/get-movie-details).
  *
  * Created by terminaether on 2019-12-24.
  */
