@@ -16,6 +16,8 @@ import codes.terminaether.watchlist.data.model.Show
 import codes.terminaether.watchlist.feature.discover.data.model.DiscoverResponse
 import codes.terminaether.watchlist.feature.discover.data.repo.DiscoverRepository
 import codes.terminaether.watchlist.feature.discover.ui.viewmodels.DiscoverViewModel
+import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.fragment_discover.*
 
 /**
  * The Discover screen allows users to view a list of popular releases from TMDb. The screen is
@@ -48,22 +50,44 @@ class DiscoverFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         discoverViewModel.discoverMoviesResult.observe(
             viewLifecycleOwner,
             Observer<ApiResult<DiscoverResponse<Movie>>> { this.handleDiscoverMoviesData(it) })
-        discoverViewModel.fetchMovies()
-
         discoverViewModel.discoverShowsResult.observe(
             viewLifecycleOwner,
             Observer<ApiResult<DiscoverResponse<Show>>> { this.handleDiscoverShowsData(it) })
-        discoverViewModel.fetchShows()
+
+        tl_discover_fragment.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                //Do Nothing
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                //Do Nothing
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val tabText = tab!!.text
+                if (tabText == getString(R.string.tab_item_movies)) {
+                    discoverViewModel.fetchMovies()
+                } else if (tabText == getString(R.string.tab_item_shows)) {
+                    discoverViewModel.fetchShows()
+                }
+            }
+        })
+
+        discoverViewModel.fetchMovies()
     }
 
     private fun handleDiscoverMoviesData(discoverResponse: ApiResult<DiscoverResponse<Movie>>) {
         when (discoverResponse) {
             is ApiResult.Success -> {
                 Log.d("Attention", "API Success: Movies")
-                Log.d("Attention", "First Movie Result: " + discoverResponse.data!!.results[0].title)
+                Log.d(
+                    "Attention",
+                    "First Movie Result: " + discoverResponse.data!!.results[0].title
+                )
             }
             is ApiResult.Error -> Log.d("Attention", "API Error: Movies")
         }
