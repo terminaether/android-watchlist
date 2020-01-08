@@ -14,7 +14,7 @@ data class DiscoverResponse<T>(
     val page: Int,
 
     /**
-     * Note: The Movie/Show objects in this response are incomplete. For a movie's full details, a
+     * Note: The Movie/Show objects in this response are incomplete. For an item's full details, a
      * call should be made to `/movie/{movie_id}` or `/tv/{tv_id}`.
      */
     @SerializedName("results")
