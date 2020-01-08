@@ -14,11 +14,12 @@ data class DiscoverResponse<T>(
     val page: Int,
 
     /**
+     * A list of the requested Movies or Shows.
+     *
      * Note: The Movie/Show objects in this response are incomplete. For an item's full details, a
      * call should be made to `/movie/{movie_id}` or `/tv/{tv_id}`.
      */
-    @SerializedName("results")
-    val movies: List<T>,
+    val results: List<T>,
 
     @SerializedName("total_results")
     val totalResults: Int,
