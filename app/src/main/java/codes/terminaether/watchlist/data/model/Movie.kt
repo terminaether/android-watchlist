@@ -14,7 +14,7 @@ data class Movie(
     val adult: Boolean?,
 
     /**
-     * The path parameter to be supplied to `https://image.tmdb.org/t/p/{size}/{path}' in order to
+     * The path parameter to be supplied to `https://image.tmdb.org/t/p/{size}/{path}` in order to
      * get this Movie's backdrop.
      */
     @SerializedName("backdrop_path")
@@ -55,7 +55,7 @@ data class Movie(
     val popularity: Number?,
 
     /**
-     * The path parameter to be supplied to `https://image.tmdb.org/t/p/{size}/{path}' in order to
+     * The path parameter to be supplied to `https://image.tmdb.org/t/p/{size}/{path}` in order to
      * get this Movie's poster.
      */
     @SerializedName("poster_path")
