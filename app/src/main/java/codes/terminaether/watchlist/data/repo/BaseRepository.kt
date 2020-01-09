@@ -30,9 +30,11 @@ open class BaseRepository {
         val response = call.invoke()
         if (response.isSuccessful) {
             val responseBody = response.body()
-            if (responseBody != null) {
+            return if (responseBody != null) {
                 //Returns a guaranteed non-null response body
-                return ApiResult.Success(responseBody)
+                ApiResult.Success(responseBody)
+            } else {
+                ApiResult.Error(IOException("Empty Response Body"))
             }
         }
 
