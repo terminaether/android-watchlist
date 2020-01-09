@@ -86,7 +86,7 @@ class DiscoverFragment : Fragment() {
                 Log.d("Attention", "API Success: Movies")
                 Log.d(
                     "Attention",
-                    "First Movie Result: " + discoverResponse.data!!.results[0].title
+                    "First Movie Result: " + discoverResponse.data.results[0].title
                 )
             }
             is ApiResult.Error -> Log.d("Attention", "API Error: Movies")
@@ -97,7 +97,7 @@ class DiscoverFragment : Fragment() {
         when (discoverResponse) {
             is ApiResult.Success -> {
                 Log.d("Attention", "API Success: Shows")
-                Log.d("Attention", "First Show Result: " + discoverResponse.data!!.results[0].name)
+                Log.d("Attention", "First Show Result: " + discoverResponse.data.results[0].name)
             }
             is ApiResult.Error -> Log.d("Attention", "API Error: Shows")
         }

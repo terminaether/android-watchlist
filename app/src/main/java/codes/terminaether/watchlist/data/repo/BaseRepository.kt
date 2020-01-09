@@ -28,7 +28,13 @@ open class BaseRepository {
         errorMessage: String
     ): ApiResult<T> {
         val response = call.invoke()
-        if (response.isSuccessful) return ApiResult.Success(response.body())
+        if (response.isSuccessful) {
+            val responseBody = response.body()
+            if (responseBody != null) {
+                //Returns a guaranteed non-null response body
+                return ApiResult.Success(responseBody)
+            }
+        }
 
         return ApiResult.Error(IOException(errorMessage))
     }
