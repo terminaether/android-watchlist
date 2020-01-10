@@ -53,11 +53,26 @@ class MovieListAdapter : ListAdapter<Movie, MovieListAdapter.MovieViewHolder>(Mo
     inner class MovieViewHolder(movieView: View) : RecyclerView.ViewHolder(movieView) {
         private val poster: ImageView = movieView.findViewById(R.id.poster)
         private val title: TextView = movieView.findViewById(R.id.title)
+        private val overview: TextView = movieView.findViewById(R.id.overview)
 
         fun bind(movie: Movie) {
             //TODO (UI): Dynamically set image size based on device size
             poster.load("https://image.tmdb.org/t/p/w342" + movie.posterPath)
+
             title.text = movie.title
+
+            var overviewSubString = movie.overview?.substringBefore(".")
+            if (overviewSubString != null && overviewSubString.isNotEmpty()) {
+                if (overviewSubString.length <= 20) {
+                    //If the overview is too short, extend to the end of the next sentence
+                    val extendedSubString = movie.overview!!.substringAfter(".")
+                    overviewSubString += extendedSubString.substringBefore(".")
+                }
+            } else {
+                overviewSubString = "Description unavailable"
+            }
+            overviewSubString += "."
+            overview.text = overviewSubString
         }
     }
 
