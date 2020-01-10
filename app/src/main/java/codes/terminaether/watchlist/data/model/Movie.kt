@@ -42,7 +42,11 @@ data class Movie(
     /**
      * Runtime in minutes.
      */
-    val runtime: Int?, val tagline: String?, val title: String?,
+    val runtime: Int?,
+
+    val tagline: String?,
+
+    val title: String?,
 
     /**
      * True if there are available trailers, bloopers or behind the scenes videos for this Movie.
