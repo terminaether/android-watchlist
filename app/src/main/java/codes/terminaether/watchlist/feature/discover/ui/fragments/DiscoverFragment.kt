@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import codes.terminaether.watchlist.R
+import codes.terminaether.watchlist.adapters.MovieListAdapter
 import codes.terminaether.watchlist.data.model.ApiResult
 import codes.terminaether.watchlist.data.model.Movie
 import codes.terminaether.watchlist.data.model.Show
@@ -77,17 +78,16 @@ class DiscoverFragment : Fragment() {
             }
         })
 
+        rv_media.adapter = MovieListAdapter()
+
         discoverViewModel.fetchMovies()
     }
 
     private fun handleDiscoverMoviesData(discoverResponse: ApiResult<DiscoverResponse<Movie>>) {
         when (discoverResponse) {
             is ApiResult.Success -> {
-                Log.d("Attention", "API Success: Movies")
-                Log.d(
-                    "Attention",
-                    "First Movie Result: " + discoverResponse.data.results[0].title
-                )
+                val adapter: MovieListAdapter = rv_media.adapter as MovieListAdapter
+                adapter.swapData(discoverResponse.data.results)
             }
             is ApiResult.Error -> Log.d("Attention", "API Error: Movies")
         }
