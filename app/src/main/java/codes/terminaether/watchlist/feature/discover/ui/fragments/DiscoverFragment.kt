@@ -61,7 +61,7 @@ class DiscoverFragment : Fragment() {
 
         tl_discover_fragment.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
-                //Do Nothing
+                rv_media.smoothScrollToPosition(0)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
