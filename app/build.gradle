@@ -13,6 +13,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
     defaultConfig {
         applicationId "codes.terminaether.watchlist"
         minSdkVersion 19
@@ -61,6 +65,9 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.1.0'
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+
+    //Coil
+    implementation 'io.coil-kt:coil:0.9.1'
 
     //Dagger
     implementation "com.google.dagger:dagger:$dagger_version"
