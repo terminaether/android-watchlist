@@ -11,10 +11,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import codes.terminaether.watchlist.R
 import codes.terminaether.watchlist.adapters.MediaListAdapter
-import codes.terminaether.watchlist.data.model.ApiResult
 import codes.terminaether.watchlist.data.model.Movie
 import codes.terminaether.watchlist.data.model.Show
-import codes.terminaether.watchlist.feature.discover.data.model.DiscoverResponse
+import codes.terminaether.watchlist.data.model.UiState
 import codes.terminaether.watchlist.feature.discover.data.repo.DiscoverRepository
 import codes.terminaether.watchlist.feature.discover.ui.viewmodels.DiscoverViewModel
 import com.google.android.material.tabs.TabLayout
@@ -54,10 +53,10 @@ class DiscoverFragment : Fragment() {
 
         discoverViewModel.discoverMoviesResult.observe(
             viewLifecycleOwner,
-            Observer<ApiResult<DiscoverResponse<Movie>>> { this.handleDiscoverMoviesData(it) })
+            Observer<UiState<List<Movie>>> { this.handleDiscoverMoviesData(it) })
         discoverViewModel.discoverShowsResult.observe(
             viewLifecycleOwner,
-            Observer<ApiResult<DiscoverResponse<Show>>> { this.handleDiscoverShowsData(it) })
+            Observer<UiState<List<Show>>> { this.handleDiscoverShowsData(it) })
 
         tl_discover_fragment.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -83,23 +82,25 @@ class DiscoverFragment : Fragment() {
         discoverViewModel.fetchMovies()
     }
 
-    private fun handleDiscoverMoviesData(discoverResponse: ApiResult<DiscoverResponse<Movie>>) {
+    private fun handleDiscoverMoviesData(discoverResponse: UiState<List<Movie>>) {
         when (discoverResponse) {
-            is ApiResult.Success -> {
+            is UiState.Success -> {
                 val adapter: MediaListAdapter = rv_media.adapter as MediaListAdapter
-                adapter.swapData(discoverResponse.data.results)
+                adapter.swapData(discoverResponse.data)
             }
-            is ApiResult.Error -> Log.d("Attention", "API Error: Movies")
+            is UiState.Loading -> Log.d("Attention", "Loading Movies")
+            is UiState.Error -> Log.d("Attention", "Movies: " + discoverResponse.exception)
         }
     }
 
-    private fun handleDiscoverShowsData(discoverResponse: ApiResult<DiscoverResponse<Show>>) {
+    private fun handleDiscoverShowsData(discoverResponse: UiState<List<Show>>) {
         when (discoverResponse) {
-            is ApiResult.Success -> {
+            is UiState.Success -> {
                 val adapter: MediaListAdapter = rv_media.adapter as MediaListAdapter
-                adapter.swapData(discoverResponse.data.results)
+                adapter.swapData(discoverResponse.data)
             }
-            is ApiResult.Error -> Log.d("Attention", "API Error: Shows")
+            is UiState.Loading -> Log.d("Attention", "Loading Shows")
+            is UiState.Error -> Log.d("Attention", "Shows: " + discoverResponse.exception)
         }
     }
 
