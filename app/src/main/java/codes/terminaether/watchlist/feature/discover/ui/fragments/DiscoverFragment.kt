@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import codes.terminaether.watchlist.R
-import codes.terminaether.watchlist.adapters.MovieListAdapter
+import codes.terminaether.watchlist.adapters.MediaListAdapter
 import codes.terminaether.watchlist.data.model.ApiResult
 import codes.terminaether.watchlist.data.model.Movie
 import codes.terminaether.watchlist.data.model.Show
@@ -78,7 +78,7 @@ class DiscoverFragment : Fragment() {
             }
         })
 
-        rv_media.adapter = MovieListAdapter()
+        rv_media.adapter = MediaListAdapter()
 
         discoverViewModel.fetchMovies()
     }
@@ -86,7 +86,7 @@ class DiscoverFragment : Fragment() {
     private fun handleDiscoverMoviesData(discoverResponse: ApiResult<DiscoverResponse<Movie>>) {
         when (discoverResponse) {
             is ApiResult.Success -> {
-                val adapter: MovieListAdapter = rv_media.adapter as MovieListAdapter
+                val adapter: MediaListAdapter = rv_media.adapter as MediaListAdapter
                 adapter.swapData(discoverResponse.data.results)
             }
             is ApiResult.Error -> Log.d("Attention", "API Error: Movies")
@@ -96,8 +96,8 @@ class DiscoverFragment : Fragment() {
     private fun handleDiscoverShowsData(discoverResponse: ApiResult<DiscoverResponse<Show>>) {
         when (discoverResponse) {
             is ApiResult.Success -> {
-                Log.d("Attention", "API Success: Shows")
-                Log.d("Attention", "First Show Result: " + discoverResponse.data.results[0].name)
+                val adapter: MediaListAdapter = rv_media.adapter as MediaListAdapter
+                adapter.swapData(discoverResponse.data.results)
             }
             is ApiResult.Error -> Log.d("Attention", "API Error: Shows")
         }

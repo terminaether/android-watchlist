@@ -9,21 +9,23 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import codes.terminaether.watchlist.R
+import codes.terminaether.watchlist.data.model.Media
 import codes.terminaether.watchlist.data.model.Movie
+import codes.terminaether.watchlist.data.model.Show
 import coil.api.load
 
 /**
- * ListAdapter responsible for Movie items to be displayed in a RecyclerView.
+ * ListAdapter responsible for Media items to be displayed in a RecyclerView.
  *
  * Created by terminaether on 2020-01-09.
  */
-class MovieListAdapter : ListAdapter<Movie, MovieListAdapter.MovieViewHolder>(MovieDiffCallback()) {
+class MediaListAdapter : ListAdapter<Media, MediaListAdapter.MediaViewHolder>(MediaDiffCallback()) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): MovieViewHolder {
-        return MovieViewHolder(
+    ): MediaViewHolder {
+        return MediaViewHolder(
             LayoutInflater.from(parent.context).inflate(
                 R.layout.item_list_movie,
                 parent,
@@ -32,40 +34,43 @@ class MovieListAdapter : ListAdapter<Movie, MovieListAdapter.MovieViewHolder>(Mo
         )
     }
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    fun swapData(data: List<Movie>) {
+    fun swapData(data: List<Media>) {
         submitList(data.toMutableList())
     }
 
-    private class MovieDiffCallback : DiffUtil.ItemCallback<Movie>() {
-        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+    private class MediaDiffCallback : DiffUtil.ItemCallback<Media>() {
+        override fun areItemsTheSame(oldItem: Media, newItem: Media): Boolean {
             return (oldItem == newItem)
         }
 
-        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        override fun areContentsTheSame(oldItem: Media, newItem: Media): Boolean {
             return (oldItem.id == newItem.id)
         }
     }
 
-    inner class MovieViewHolder(movieView: View) : RecyclerView.ViewHolder(movieView) {
-        private val poster: ImageView = movieView.findViewById(R.id.poster)
-        private val title: TextView = movieView.findViewById(R.id.title)
-        private val overview: TextView = movieView.findViewById(R.id.overview)
+    inner class MediaViewHolder(mediaView: View) : RecyclerView.ViewHolder(mediaView) {
+        private val poster: ImageView = mediaView.findViewById(R.id.poster)
+        private val title: TextView = mediaView.findViewById(R.id.title)
+        private val overview: TextView = mediaView.findViewById(R.id.overview)
 
-        fun bind(movie: Movie) {
+        fun bind(media: Media) {
             //TODO (UI): Dynamically set image size based on device size
-            poster.load("https://image.tmdb.org/t/p/w342" + movie.posterPath)
+            poster.load("https://image.tmdb.org/t/p/w342" + media.posterPath)
 
-            title.text = movie.title
+            var titleText: String? = null
+            if (media is Movie) titleText = media.title
+            if (media is Show) titleText = media.name
+            title.text = titleText
 
-            var overviewSubString = movie.overview?.substringBefore(".")
+            var overviewSubString = media.overview?.substringBefore(".")
             if (overviewSubString != null && overviewSubString.isNotEmpty()) {
                 if (overviewSubString.length <= 20) {
                     //If the overview is too short, extend to the end of the next sentence
-                    val extendedSubString = movie.overview!!.substringAfter(".")
+                    val extendedSubString = media.overview!!.substringAfter(".")
                     overviewSubString += extendedSubString.substringBefore(".")
                 }
             } else {
