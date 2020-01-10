@@ -2,8 +2,7 @@ package codes.terminaether.watchlist.feature.discover.data.repo
 
 import codes.terminaether.watchlist.WatchlistApplication
 import codes.terminaether.watchlist.data.model.ApiResult
-import codes.terminaether.watchlist.data.model.Movie
-import codes.terminaether.watchlist.data.model.Show
+import codes.terminaether.watchlist.data.model.Media
 import codes.terminaether.watchlist.data.model.UiState
 import codes.terminaether.watchlist.data.repo.BaseRepository
 
@@ -17,7 +16,7 @@ class DiscoverRepository : BaseRepository() {
     private val discoverService =
         WatchlistApplication.INSTANCE.networkComponent.getDiscoverService()
 
-    suspend fun discoverMovies(): UiState<List<Movie>> {
+    suspend fun discoverMovies(): UiState<List<Media>> {
         val response = safeApiCall(
             call = { discoverService.discoverMovies().await() },
             errorMessage = "Error Discovering Movies"
@@ -33,7 +32,7 @@ class DiscoverRepository : BaseRepository() {
         }
     }
 
-    suspend fun discoverShows(): UiState<List<Show>> {
+    suspend fun discoverShows(): UiState<List<Media>> {
         val response = safeApiCall(
             call = { discoverService.discoverShows().await() },
             errorMessage = "Error Discovering Shows"
