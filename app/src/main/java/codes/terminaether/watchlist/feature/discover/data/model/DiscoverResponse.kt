@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
  *
  * Created by terminaether on 2020-01-02.
  */
-data class DiscoverResponse<T>(
+data class DiscoverResponse<Media>(
     /**
      * This response's page number.
      */
@@ -16,10 +16,10 @@ data class DiscoverResponse<T>(
     /**
      * A list of the requested Movies or Shows.
      *
-     * Note: The Movie/Show objects in this response are incomplete. For an item's full details, a
+     * Note: The Media objects in this response are incomplete. For an item's full details, a
      * call should be made to `/movie/{movie_id}` or `/tv/{tv_id}`.
      */
-    val results: List<T>,
+    val results: List<Media>,
 
     @SerializedName("total_results")
     val totalResults: Int,

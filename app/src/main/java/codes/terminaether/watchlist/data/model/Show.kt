@@ -3,19 +3,12 @@ package codes.terminaether.watchlist.data.model
 import com.google.gson.annotations.SerializedName
 
 /**
- * A data class describing a Show, as per TMDb.
+ * A class describing a Show, as per TMDb.
  * @see [TV Details](https://developers.themoviedb.org/3/tv/get-tv-details)
  *
  * Created by terminaether on 2020-01-08.
  */
-data class Show(
-    /**
-     * The path parameter to be supplied to `https://image.tmdb.org/t/p/{size}/{path}` in order to
-     * get this Show's backdrop.
-     */
-    @SerializedName("backdrop_path")
-    val backdropPath: String?,
-
+class Show(
     /**
      * Runtimes in minutes, may vary between season.
      */
@@ -27,16 +20,6 @@ data class Show(
      */
     @SerializedName("first_air_date")
     val firstAirDate: String?,
-
-    /**
-     * The Show's official website, if available.
-     */
-    val homepage: String?,
-
-    /**
-     * The ID for this Show within TMDb.
-     */
-    val id: Int?,
 
     @SerializedName("in_production")
     val inProduction: Boolean?,
@@ -71,52 +54,14 @@ data class Show(
     @SerializedName("origin_country")
     val originCountry: Array<String>?,
 
-    /**
-     * ISO 639-1 code.
-     * @see [List of ISO 639-1 Codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
-     */
-    @SerializedName("original_language")
-    val originalLanguage: String?,
-
     @SerializedName("original_name")
     val originalName: String?,
-
-    val overview: String?,
-
-    /**
-     * Any number from 0 to 'infinite' representing this Show's relative popularity.
-     */
-    val popularity: Number?,
-
-    /**
-     * The path parameter to be supplied to `https://image.tmdb.org/t/p/{size}/{path}` in order to
-     * get this Show's poster.
-     */
-    @SerializedName("poster_path")
-    val posterPath: String?,
-
-    /**
-     * One of: Planned, In Production, Pilot, Returning Series, Ended, Canceled.
-     */
-    val status: String?,
 
     /**
      * One of: Documentary, Miniseries, News, Reality, Scripted, Talk Show, Video.
      */
-    val type: String?,
-
-    /**
-     * The average user rating, from 0.0 to 10.0.
-     */
-    @SerializedName("vote_average")
-    val voteAverage: Number?,
-
-    /**
-     * The number of individual votes/ratings cast on this Show.
-     */
-    @SerializedName("vote_count")
-    val voteCount: Int?
-) {
+    val type: String?
+) : Media() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
