@@ -84,8 +84,11 @@ class DiscoverFragment : Fragment() {
                 val adapter: MediaListAdapter = rv_media.adapter as MediaListAdapter
                 adapter.swapData(discoverResponse.data)
             }
-            is UiState.Loading -> Log.d("Attention", "Loading Movies")
-            is UiState.Error -> Log.d("Attention", "Movies: " + discoverResponse.exception)
+            is UiState.Loading -> Log.d("Attention", "Loading Media")
+            is UiState.Error -> Log.d(
+                "Attention",
+                "Error Loading Media: " + discoverResponse.exception
+            )
         }
     }
 
