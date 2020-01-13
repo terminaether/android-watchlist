@@ -1,9 +1,7 @@
 package codes.terminaether.watchlist.feature.discover.data.repo
 
 import codes.terminaether.watchlist.WatchlistApplication
-import codes.terminaether.watchlist.data.model.ApiResult
-import codes.terminaether.watchlist.data.model.Media
-import codes.terminaether.watchlist.data.model.UiState
+import codes.terminaether.watchlist.data.model.*
 import codes.terminaether.watchlist.data.repo.BaseRepository
 
 /**
@@ -24,7 +22,8 @@ class DiscoverRepository : BaseRepository() {
 
         return when (response) {
             is ApiResult.Success -> {
-                UiState.Success(response.data.results)
+                val cleanDataSet = removeInvalidData(response.data.results)
+                UiState.Success(cleanDataSet)
             }
             is ApiResult.Error -> {
                 UiState.Error(response.exception)
@@ -40,12 +39,29 @@ class DiscoverRepository : BaseRepository() {
 
         return when (response) {
             is ApiResult.Success -> {
-                UiState.Success(response.data.results)
+                val cleanDataSet = removeInvalidData(response.data.results)
+                UiState.Success(cleanDataSet)
             }
             is ApiResult.Error -> {
                 UiState.Error(response.exception)
             }
         }
+    }
+
+    private fun removeInvalidData(dataSet: List<Media>): List<Media> {
+        val cleanDataSet = dataSet.toMutableList()
+        cleanDataSet.removeAll { it.posterPath.isNullOrBlank() }
+
+        val iterator = cleanDataSet.iterator()
+        iterator.forEach {
+            if (it is Movie) {
+                if (it.title.isNullOrBlank()) iterator.remove()
+            } else if (it is Show) {
+                if (it.name.isNullOrBlank()) iterator.remove()
+            }
+        }
+
+        return cleanDataSet
     }
 
 }
