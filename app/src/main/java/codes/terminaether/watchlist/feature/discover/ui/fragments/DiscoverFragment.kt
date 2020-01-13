@@ -87,7 +87,7 @@ class DiscoverFragment : Fragment() {
             is UiState.Loading -> Log.d("Attention", "Loading Media")
             is UiState.Error -> Log.d(
                 "Attention",
-                "Error Loading Media: " + discoverResponse.exception
+                "Error Loading Media: ${discoverResponse.exception}"
             )
         }
     }
