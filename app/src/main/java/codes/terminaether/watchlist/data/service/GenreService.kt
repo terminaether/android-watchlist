@@ -13,9 +13,9 @@ import retrofit2.http.GET
 interface GenreService {
 
     @GET("genre/movie/list")
-    fun getMovieGenres(): Deferred<Response<Genre>>
+    fun getMovieGenres(): Deferred<Response<List<Genre>>>
 
     @GET("genre/tv/list")
-    fun getShowGenres(): Deferred<Response<Genre>>
+    fun getShowGenres(): Deferred<Response<List<Genre>>>
 
 }
