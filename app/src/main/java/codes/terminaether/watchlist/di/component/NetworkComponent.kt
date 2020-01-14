@@ -1,6 +1,7 @@
 package codes.terminaether.watchlist.di.component
 
 import codes.terminaether.watchlist.WatchlistApplication
+import codes.terminaether.watchlist.data.service.GenreService
 import codes.terminaether.watchlist.di.module.NetworkModule
 import codes.terminaether.watchlist.feature.discover.data.service.DiscoverService
 import dagger.BindsInstance
@@ -37,5 +38,10 @@ interface NetworkComponent {
      * Provides DiscoverService.
      */
     fun getDiscoverService(): DiscoverService
+
+    /**
+     * Provides GenreService.
+     */
+    fun getGenreService(): GenreService
 
 }
