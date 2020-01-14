@@ -27,7 +27,7 @@ class MediaListAdapter : ListAdapter<Media, MediaListAdapter.MediaViewHolder>(Me
     ): MediaViewHolder {
         return MediaViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.item_list_movie,
+                R.layout.item_list_media,
                 parent,
                 false
             )
