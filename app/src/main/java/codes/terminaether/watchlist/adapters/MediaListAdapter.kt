@@ -54,6 +54,8 @@ class MediaListAdapter : ListAdapter<Media, MediaListAdapter.MediaViewHolder>(Me
     }
 
     inner class MediaViewHolder(mediaView: View) : RecyclerView.ViewHolder(mediaView) {
+        private val context = mediaView.context
+
         private val poster: ImageView = mediaView.findViewById(R.id.poster)
         private val title: TextView = mediaView.findViewById(R.id.title)
         private val overview: TextView = mediaView.findViewById(R.id.overview)
@@ -79,7 +81,7 @@ class MediaListAdapter : ListAdapter<Media, MediaListAdapter.MediaViewHolder>(Me
                     overviewSubString += extendedSubString.substringBefore(".")
                 }
             } else {
-                overviewSubString = "Description unavailable"
+                overviewSubString = context.getString(R.string.list_item_empty_overview)
             }
             overviewSubString += "."
             overview.text = overviewSubString
@@ -88,10 +90,9 @@ class MediaListAdapter : ListAdapter<Media, MediaListAdapter.MediaViewHolder>(Me
             if (!media.genres.isNullOrEmpty()) {
                 genre.text = media.genres[0].name
             } else if (media.genreIds != null && media.genreIds.isNotEmpty()) {
-                val repo = GenreRepository()
-                genre.text = repo.getGenreNameById(media.genreIds[0])
+                genre.text = GenreRepository().getGenreNameById(media.genreIds[0])
             } else {
-                genre.text = "Unknown"
+                genre.text = context.getString(R.string.list_item_empty_genre)
             }
         }
     }

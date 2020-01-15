@@ -9,4 +9,8 @@
     <!-- Tab Item Titles -->
     <string name="tab_item_movies">Movies</string>
     <string name="tab_item_shows">Shows</string>
+
+    <!-- List Item Defaults -->
+    <string name="list_item_empty_overview">Description unavailable</string>
+    <string name="list_item_empty_genre">Unknown</string>
 </resources>
