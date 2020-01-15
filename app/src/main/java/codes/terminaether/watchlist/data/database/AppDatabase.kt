@@ -23,7 +23,11 @@ abstract class AppDatabase : RoomDatabase() {
         fun getAppDatabase(context: Context): AppDatabase {
             if (INSTANCE == null) {
                 INSTANCE = Room
-                    .databaseBuilder(context.applicationContext, AppDatabase::class.java, "")
+                    .databaseBuilder(
+                        context.applicationContext,
+                        AppDatabase::class.java,
+                        "Watchlist Database"
+                    )
                     .build()
             }
 
