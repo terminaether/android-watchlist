@@ -6,6 +6,7 @@ buildscript {
     ext.navigation_version = '2.1.0'
     ext.okhttp3_version = '3.13.1'
     ext.retrofit2_version = '2.6.0'
+    ext.room_version = '2.2.3'
 
     repositories {
         google()
