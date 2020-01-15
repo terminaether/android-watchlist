@@ -73,7 +73,8 @@ class MediaListAdapter : ListAdapter<Media, MediaListAdapter.MediaViewHolder>(Me
             //Populate the item's overview via a shortened string, handle empty overviews
             var overviewSubString = media.overview?.substringBefore(".")
             if (!overviewSubString.isNullOrBlank()) {
-                if (overviewSubString.length <= 20) {
+                if (overviewSubString.length <= 60) {
+                    overviewSubString += "."
                     //If the overview is too short, extend to the end of the next sentence
                     val extendedSubString = media.overview!!.substringAfter(".")
                     overviewSubString += extendedSubString.substringBefore(".")
