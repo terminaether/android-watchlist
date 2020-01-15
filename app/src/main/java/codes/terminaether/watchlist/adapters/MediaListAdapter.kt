@@ -12,7 +12,6 @@ import codes.terminaether.watchlist.R
 import codes.terminaether.watchlist.data.model.Media
 import codes.terminaether.watchlist.data.model.Movie
 import codes.terminaether.watchlist.data.model.Show
-import codes.terminaether.watchlist.data.repo.GenreRepository
 import coil.api.load
 
 /**
@@ -59,7 +58,6 @@ class MediaListAdapter : ListAdapter<Media, MediaListAdapter.MediaViewHolder>(Me
         private val poster: ImageView = mediaView.findViewById(R.id.poster)
         private val title: TextView = mediaView.findViewById(R.id.title)
         private val overview: TextView = mediaView.findViewById(R.id.overview)
-        private val genre: TextView = mediaView.findViewById(R.id.genre)
 
         fun bind(media: Media) {
             //TODO (UI): Dynamically set image size based on device size
@@ -85,15 +83,6 @@ class MediaListAdapter : ListAdapter<Media, MediaListAdapter.MediaViewHolder>(Me
             }
             overviewSubString += "."
             overview.text = overviewSubString
-
-            //Populate the item's genre tag via GenreRepository if necessary, handle empty values
-            if (!media.genres.isNullOrEmpty()) {
-                genre.text = media.genres[0].name
-            } else if (media.genreIds != null && media.genreIds.isNotEmpty()) {
-                genre.text = GenreRepository().getGenreNameById(media.genreIds[0])
-            } else {
-                genre.text = context.getString(R.string.list_item_empty_genre)
-            }
         }
     }
 

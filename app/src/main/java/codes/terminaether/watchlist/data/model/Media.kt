@@ -37,13 +37,6 @@ open class Media(
     val overview: String? = null,
 
     /**
-     * The Genre IDs to be supplied to [codes.terminaether.watchlist.data.repo.GenreRepository] to
-     * retrieve this Media's [Genre] text value.
-     */
-    @SerializedName("genre_ids")
-    val genreIds: IntArray? = null,
-
-    /**
      * Any number from 0 to 'infinite' representing this Show's relative popularity.
      */
     val popularity: Number? = null,
