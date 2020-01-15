@@ -61,15 +61,18 @@ class MediaListAdapter : ListAdapter<Media, MediaListAdapter.MediaViewHolder>(Me
 
         fun bind(media: Media) {
             //TODO (UI): Dynamically set image size based on device size
+            //Populate the item's poster
             poster.load("https://image.tmdb.org/t/p/w342" + media.posterPath)
 
+            //Populate the item's title
             var titleText: String? = null
             if (media is Movie) titleText = media.title
             if (media is Show) titleText = media.name
             title.text = titleText
 
+            //Populate the item's overview via a shortened string, handle empty overviews
             var overviewSubString = media.overview?.substringBefore(".")
-            if (overviewSubString != null && overviewSubString.isNotEmpty()) {
+            if (!overviewSubString.isNullOrBlank()) {
                 if (overviewSubString.length <= 20) {
                     //If the overview is too short, extend to the end of the next sentence
                     val extendedSubString = media.overview!!.substringAfter(".")
@@ -81,6 +84,7 @@ class MediaListAdapter : ListAdapter<Media, MediaListAdapter.MediaViewHolder>(Me
             overviewSubString += "."
             overview.text = overviewSubString
 
+            //Populate the item's genre tag via GenreRepository if necessary, handle empty values
             if (!media.genres.isNullOrEmpty()) {
                 genre.text = media.genres[0].name
             } else if (media.genreIds != null && media.genreIds.isNotEmpty()) {
