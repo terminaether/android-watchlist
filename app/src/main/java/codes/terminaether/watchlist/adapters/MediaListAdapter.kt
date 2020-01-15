@@ -3,6 +3,7 @@ package codes.terminaether.watchlist.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -19,7 +20,8 @@ import coil.api.load
  *
  * Created by terminaether on 2020-01-09.
  */
-class MediaListAdapter : ListAdapter<Media, MediaListAdapter.MediaViewHolder>(MediaDiffCallback()) {
+class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
+    ListAdapter<Media, MediaListAdapter.MediaViewHolder>(MediaDiffCallback()) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -52,12 +54,14 @@ class MediaListAdapter : ListAdapter<Media, MediaListAdapter.MediaViewHolder>(Me
         }
     }
 
-    inner class MediaViewHolder(mediaView: View) : RecyclerView.ViewHolder(mediaView) {
+    inner class MediaViewHolder(mediaView: View) : RecyclerView.ViewHolder(mediaView),
+        View.OnClickListener {
         private val context = mediaView.context
 
         private val poster: ImageView = mediaView.findViewById(R.id.poster)
         private val title: TextView = mediaView.findViewById(R.id.title)
         private val overview: TextView = mediaView.findViewById(R.id.overview)
+        private val save: ImageButton = mediaView.findViewById(R.id.save)
 
         fun bind(media: Media) {
             //TODO (UI): Dynamically set image size based on device size
@@ -84,7 +88,18 @@ class MediaListAdapter : ListAdapter<Media, MediaListAdapter.MediaViewHolder>(Me
             }
             overviewSubString += "."
             overview.text = overviewSubString
+
+            //TODO (UI): Set image resource based on item's presence in database
+            save.setOnClickListener(this)
         }
+
+        override fun onClick(p0: View?) {
+            mediaSaveListener.onListItemSaveClick(adapterPosition)
+        }
+    }
+
+    interface MediaSaveListener {
+        fun onListItemSaveClick(itemPosition: Int)
     }
 
 }

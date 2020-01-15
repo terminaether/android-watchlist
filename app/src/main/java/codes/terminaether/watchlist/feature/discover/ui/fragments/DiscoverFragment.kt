@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_discover.*
  *
  * Created by terminaether on 2019-12-19.
  */
-class DiscoverFragment : Fragment() {
+class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
 
     private lateinit var discoverViewModel: DiscoverViewModel
 
@@ -73,9 +73,13 @@ class DiscoverFragment : Fragment() {
             }
         })
 
-        rv_media.adapter = MediaListAdapter()
+        rv_media.adapter = MediaListAdapter(this)
 
         discoverViewModel.fetchMovies()
+    }
+
+    override fun onListItemSaveClick(itemPosition: Int) {
+        //TODO (Code): Add item to database via ViewModel
     }
 
     private fun handleDiscoverData(discoverResponse: UiState<List<Media>>) {
