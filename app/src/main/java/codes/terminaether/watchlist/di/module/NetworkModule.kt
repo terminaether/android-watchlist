@@ -1,6 +1,7 @@
 package codes.terminaether.watchlist.di.module
 
 import codes.terminaether.watchlist.BuildConfig
+import codes.terminaether.watchlist.data.service.GenreService
 import codes.terminaether.watchlist.feature.discover.data.service.DiscoverService
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
@@ -57,5 +58,10 @@ object NetworkModule {
     @Provides
     fun providesDiscoverService(retrofit: Retrofit): DiscoverService =
         retrofit.create(DiscoverService::class.java)
+
+    @Singleton
+    @Provides
+    fun providesGenreService(retrofit: Retrofit): GenreService =
+        retrofit.create(GenreService::class.java)
 
 }
