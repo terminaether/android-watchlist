@@ -34,7 +34,8 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
         discoverViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST") // as T
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return DiscoverViewModel(DiscoverRepository()) as T
+                //TODO (Code): Find a safer way of providing application to ViewModel
+                return DiscoverViewModel(DiscoverRepository(), activity!!.application) as T
             }
         })[DiscoverViewModel::class.java]
     }
@@ -79,7 +80,7 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
     }
 
     override fun onListItemSaveClick(itemPosition: Int) {
-        //TODO (Code): Add item to database via ViewModel
+        discoverViewModel.saveMedia(itemPosition)
     }
 
     private fun handleDiscoverData(discoverResponse: UiState<List<Media>>) {
