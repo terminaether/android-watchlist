@@ -1,5 +1,7 @@
 package codes.terminaether.watchlist.data.model
 
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -15,6 +17,7 @@ open class Media(
     @SerializedName("backdrop_path")
     val backdropPath: String? = null,
 
+    @Ignore
     val genres: List<Genre>? = null,
 
     /**
@@ -25,6 +28,7 @@ open class Media(
     /**
      * The ID for this Media within TMDb.
      */
+    @PrimaryKey(autoGenerate = false)
     val id: Int? = null,
 
     /**
@@ -39,6 +43,7 @@ open class Media(
     /**
      * Any number from 0 to 'infinite' representing this Show's relative popularity.
      */
+    @Ignore
     val popularity: Number? = null,
 
     /**
@@ -58,6 +63,7 @@ open class Media(
      * The average user rating, from 0.0 to 10.0.
      */
     @SerializedName("vote_average")
+    @Ignore
     val voteAverage: Number? = null,
 
     /**

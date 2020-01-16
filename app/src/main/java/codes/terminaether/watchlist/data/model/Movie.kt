@@ -1,5 +1,6 @@
 package codes.terminaether.watchlist.data.model
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -8,6 +9,7 @@ import com.google.gson.annotations.SerializedName
  *
  * Created by terminaether on 2019-12-24.
  */
+@Entity
 data class Movie(
     /**
      * True if this is a pornographic Movie.
