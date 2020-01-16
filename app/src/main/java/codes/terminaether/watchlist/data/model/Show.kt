@@ -1,5 +1,7 @@
 package codes.terminaether.watchlist.data.model
 
+import androidx.room.Entity
+import androidx.room.Ignore
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -8,11 +10,13 @@ import com.google.gson.annotations.SerializedName
  *
  * Created by terminaether on 2020-01-08.
  */
+@Entity
 class Show(
     /**
      * Runtimes in minutes, may vary between season.
      */
     @SerializedName("episode_run_time")
+    @Ignore
     val episodeRuntime: IntArray?,
 
     /**
@@ -28,6 +32,7 @@ class Show(
      * ISO 639-1 codes.
      * @see [List of ISO 639-1 Codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
      */
+    @Ignore
     val languages: Array<String>?,
 
     /**
@@ -52,6 +57,7 @@ class Show(
      * @see [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1)
      */
     @SerializedName("origin_country")
+    @Ignore
     val originCountry: Array<String>?,
 
     @SerializedName("original_name")
