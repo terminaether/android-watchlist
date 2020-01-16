@@ -3,6 +3,7 @@ package codes.terminaether.watchlist.data.repo
 import android.content.Context
 import codes.terminaether.watchlist.data.database.AppDatabase
 import codes.terminaether.watchlist.data.model.Movie
+import codes.terminaether.watchlist.data.model.Show
 
 /**
  * Handles saving media to the app's database, and contains methods for retrieving saved media.
@@ -14,6 +15,12 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
     fun insertMovie(movie: Movie) {
         AppDatabase.DATABASE_WRITER.execute {
             AppDatabase.getAppDatabase(context).movieDao().insertMovie(movie)
+        }
+    }
+
+    fun insertShow(show: Show) {
+        AppDatabase.DATABASE_WRITER.execute {
+            AppDatabase.getAppDatabase(context).showDao().insertShow(show)
         }
     }
 
