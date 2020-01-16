@@ -17,40 +17,40 @@ class Show(
      */
     @SerializedName("episode_run_time")
     @Ignore
-    val episodeRuntime: IntArray?,
+    var episodeRuntime: IntArray? = null,
 
     /**
      * Formatted as YYYY-MM-DD.
      */
     @SerializedName("first_air_date")
-    val firstAirDate: String?,
+    var firstAirDate: String? = null,
 
     @SerializedName("in_production")
-    val inProduction: Boolean?,
+    var inProduction: Boolean? = null,
 
     /**
      * ISO 639-1 codes.
      * @see [List of ISO 639-1 Codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
      */
     @Ignore
-    val languages: Array<String>?,
+    var languages: Array<String>? = null,
 
     /**
      * Formatted as YYYY-MM-DD.
      */
     @SerializedName("last_air_date")
-    val lastAirDate: String?,
+    var lastAirDate: String? = null,
 
-    val name: String?,
+    var name: String? = null,
 
     /**
      * Total number of episodes across all seasons.
      */
     @SerializedName("number_of_episodes")
-    val numberOfEpisodes: Int?,
+    var numberOfEpisodes: Int? = null,
 
     @SerializedName("number_of_seasons")
-    val numberOfSeasons: Int?,
+    var numberOfSeasons: Int? = null,
 
     /**
      * ISO 3166-1 Alpha-2 codes.
@@ -58,42 +58,13 @@ class Show(
      */
     @SerializedName("origin_country")
     @Ignore
-    val originCountry: Array<String>?,
+    var originCountry: Array<String>? = null,
 
     @SerializedName("original_name")
-    val originalName: String?,
+    var originalName: String? = null,
 
     /**
      * One of: Documentary, Miniseries, News, Reality, Scripted, Talk Show, Video.
      */
-    val type: String?
-) : Media() {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Show
-
-        if (episodeRuntime != null) {
-            if (other.episodeRuntime == null) return false
-            if (!episodeRuntime.contentEquals(other.episodeRuntime)) return false
-        } else if (other.episodeRuntime != null) return false
-        if (languages != null) {
-            if (other.languages == null) return false
-            if (!languages.contentEquals(other.languages)) return false
-        } else if (other.languages != null) return false
-        if (originCountry != null) {
-            if (other.originCountry == null) return false
-            if (!originCountry.contentEquals(other.originCountry)) return false
-        } else if (other.originCountry != null) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = episodeRuntime?.contentHashCode() ?: 0
-        result = 31 * result + (languages?.contentHashCode() ?: 0)
-        result = 31 * result + (originCountry?.contentHashCode() ?: 0)
-        return result
-    }
-}
+    var type: String? = null
+) : Media()
