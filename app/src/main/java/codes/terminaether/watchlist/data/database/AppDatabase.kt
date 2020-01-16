@@ -5,7 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import codes.terminaether.watchlist.data.database.dao.MovieDao
+import codes.terminaether.watchlist.data.database.dao.ShowDao
 import codes.terminaether.watchlist.data.model.Movie
+import codes.terminaether.watchlist.data.model.Show
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -14,10 +16,11 @@ import java.util.concurrent.Executors
  *
  * Created by terminaether on 2020-01-15.
  */
-@Database(entities = [Movie::class], version = 1)
+@Database(entities = [Movie::class, Show::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun movieDao(): MovieDao
+    abstract fun showDao(): ShowDao
 
     companion object {
         private var INSTANCE: AppDatabase? = null
