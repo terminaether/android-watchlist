@@ -1,7 +1,6 @@
 package codes.terminaether.watchlist.feature.discover.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_discover.*
 class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
 
     private lateinit var discoverViewModel: DiscoverViewModel
+    private lateinit var adapter: MediaListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +74,8 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
             }
         })
 
-        rv_media.adapter = MediaListAdapter(this)
+        adapter = MediaListAdapter(this)
+        rv_media.adapter = adapter
 
         discoverViewModel.fetchMovies()
     }
@@ -86,14 +87,26 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
     private fun handleDiscoverData(discoverResponse: UiState<List<Media>>) {
         when (discoverResponse) {
             is UiState.Success -> {
-                val adapter: MediaListAdapter = rv_media.adapter as MediaListAdapter
                 adapter.swapData(discoverResponse.data)
+                showProgress(false)
             }
-            is UiState.Loading -> Log.d("Attention", "Loading Media")
-            is UiState.Error -> Log.d(
-                "Attention",
-                "Error Loading Media: ${discoverResponse.exception}"
-            )
+            is UiState.Loading -> {
+                showProgress(true)
+            }
+            is UiState.Error -> {
+                showProgress(false)
+                //TODO (UI): Display an error message to the user
+            }
+        }
+    }
+
+    private fun showProgress(isLoading: Boolean) {
+        if (isLoading) {
+            pb_loading.show()
+            rv_media.visibility = View.INVISIBLE
+        } else {
+            pb_loading.hide()
+            rv_media.visibility = View.VISIBLE
         }
     }
 
