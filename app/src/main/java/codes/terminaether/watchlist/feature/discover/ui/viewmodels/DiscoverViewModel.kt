@@ -25,12 +25,21 @@ class DiscoverViewModel @Inject constructor(
 ) :
     AndroidViewModel(application) {
 
+    //Private reference to repository data for quick saving to SavedMediaRepository
+    private lateinit var mediaList: List<Media>
+
     val discoverResult = MutableLiveData<UiState<List<Media>>>()
 
     fun fetchMovies() {
         discoverResult.value = UiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.discoverMovies()
+            when (result) {
+                is UiState.Success -> {
+                    mediaList = result.data
+                }
+            }
+
             discoverResult.postValue(result)
         }
     }
@@ -39,21 +48,28 @@ class DiscoverViewModel @Inject constructor(
         discoverResult.value = UiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.discoverShows()
+            when (result) {
+                is UiState.Success -> {
+                    mediaList = result.data
+                }
+            }
+
             discoverResult.postValue(result)
         }
     }
 
     fun saveMedia(itemPosition: Int) {
-        //TODO (Code): Refine method
-        when (discoverResult.value) {
-            is UiState.Success -> {
-                val media =
-                    (discoverResult.value as UiState.Success<List<Media>>).data[itemPosition]
-                if (media is Movie) {
-                    SavedMediaRepository(getApplication()).insertMovie(media)
-                } else if (media is Show) {
-                    SavedMediaRepository(getApplication()).insertShow(media)
-                }
+        val media = mediaList[itemPosition]
+        //ID is guaranteed to be non-null
+        val mediaId = media.id
+
+        if (media is Movie) {
+            viewModelScope.launch(Dispatchers.IO) {
+                SavedMediaRepository(getApplication()).insertMovie(mediaId!!)
+            }
+        } else if (media is Show) {
+            viewModelScope.launch(Dispatchers.IO) {
+                SavedMediaRepository(getApplication()).insertShow(mediaId!!)
             }
         }
     }
