@@ -1,6 +1,7 @@
 package codes.terminaether.watchlist.di.module
 
 import codes.terminaether.watchlist.BuildConfig
+import codes.terminaether.watchlist.data.service.DetailsService
 import codes.terminaether.watchlist.feature.discover.data.service.DiscoverService
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
@@ -52,6 +53,11 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
+    @Singleton
+    @Provides
+    fun providesDetailsService(retrofit: Retrofit): DetailsService =
+        retrofit.create(DetailsService::class.java)
 
     @Singleton
     @Provides
