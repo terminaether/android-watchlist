@@ -14,12 +14,16 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
 
     private val detailsService = WatchlistApplication.INSTANCE.networkComponent.getDetailsService()
 
+    /**
+     * Fetch a Movie's full details and save to local database.
+     */
     suspend fun insertMovie(movieId: Int) {
         val response = safeApiCall(
             call = { detailsService.getMovieDetails(movieId).await() },
             errorMessage = "Error Getting Details for Movie"
         )
 
+        //TODO (UX): Use JobScheduler to try save Movie again
         when (response) {
             is ApiResult.Success -> {
                 AppDatabase.DATABASE_WRITER.execute {
@@ -29,12 +33,16 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
         }
     }
 
+    /**
+     * Fetch a Show's full details and save to local database.
+     */
     suspend fun insertShow(showId: Int) {
         val response = safeApiCall(
             call = { detailsService.getShowDetails(showId).await() },
             errorMessage = "Error Getting Details for Show"
         )
 
+        //TODO (UX): Use JobScheduler to try save Show again
         when (response) {
             is ApiResult.Success -> {
                 AppDatabase.DATABASE_WRITER.execute {
