@@ -74,8 +74,8 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
             }
         })
 
-        adapter = MediaListAdapter(this)
-        rv_media.adapter = adapter
+        rv_media.adapter = MediaListAdapter(this)
+        adapter = rv_media.adapter as MediaListAdapter
 
         discoverViewModel.fetchMovies()
     }
