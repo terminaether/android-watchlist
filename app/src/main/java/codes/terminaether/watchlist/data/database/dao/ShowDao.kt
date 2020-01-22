@@ -3,6 +3,7 @@ package codes.terminaether.watchlist.data.database.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import codes.terminaether.watchlist.data.model.Show
 
 /**
@@ -15,5 +16,8 @@ interface ShowDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertShow(show: Show)
+
+    @Query("SELECT id from Show")
+    fun getAllShowIds(): List<Int>
 
 }
