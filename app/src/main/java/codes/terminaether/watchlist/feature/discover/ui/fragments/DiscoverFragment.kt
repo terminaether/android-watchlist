@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import codes.terminaether.watchlist.R
 import codes.terminaether.watchlist.adapters.MediaListAdapter
 import codes.terminaether.watchlist.data.model.Media
@@ -15,7 +17,6 @@ import codes.terminaether.watchlist.data.model.UiState
 import codes.terminaether.watchlist.feature.discover.data.repo.DiscoverRepository
 import codes.terminaether.watchlist.feature.discover.ui.viewmodels.DiscoverViewModel
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.fragment_discover.*
 
 /**
  * The Discover screen allows users to view a list of popular releases from TMDb. The screen is
@@ -26,8 +27,11 @@ import kotlinx.android.synthetic.main.fragment_discover.*
  */
 class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
 
-    private lateinit var discoverViewModel: DiscoverViewModel
     private lateinit var adapter: MediaListAdapter
+    private lateinit var discoverViewModel: DiscoverViewModel
+    private lateinit var loadingProgressBar: ContentLoadingProgressBar
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var tabLayout: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,13 +55,17 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        discoverViewModel.discoverResult.observe(
-            viewLifecycleOwner,
-            Observer<UiState<List<Media>>> { this.handleDiscoverData(it) })
+        //Bind Views
+        loadingProgressBar = view.findViewById(R.id.pb_loading)
+        recyclerView = view.findViewById(R.id.rv_media)
+        tabLayout = view.findViewById(R.id.tl_discover_fragment)
 
-        tl_discover_fragment.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        recyclerView.adapter = MediaListAdapter(this)
+        adapter = recyclerView.adapter as MediaListAdapter
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
-                rv_media.smoothScrollToPosition(0)
+                recyclerView.smoothScrollToPosition(0)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -74,9 +82,9 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
             }
         })
 
-        rv_media.adapter = MediaListAdapter(this)
-        adapter = rv_media.adapter as MediaListAdapter
-
+        discoverViewModel.discoverResult.observe(
+            viewLifecycleOwner,
+            Observer<UiState<List<Media>>> { this.handleDiscoverData(it) })
         discoverViewModel.fetchMovies()
     }
 
@@ -102,11 +110,11 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
 
     private fun showProgress(isLoading: Boolean) {
         if (isLoading) {
-            pb_loading.show()
-            rv_media.visibility = View.INVISIBLE
+            loadingProgressBar.show()
+            recyclerView.visibility = View.INVISIBLE
         } else {
-            pb_loading.hide()
-            rv_media.visibility = View.VISIBLE
+            loadingProgressBar.hide()
+            recyclerView.visibility = View.VISIBLE
         }
     }
 
