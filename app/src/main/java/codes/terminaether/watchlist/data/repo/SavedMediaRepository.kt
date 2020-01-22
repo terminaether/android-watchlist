@@ -44,4 +44,17 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
         }
     }
 
+    /**
+     * Returns a combined list of all Movie and Show IDs stored in the database.
+     */
+    fun getMediaIds(): List<Int> {
+        val movieIds = AppDatabase.getAppDatabase(context).movieDao().getAllMovieIds()
+        val showIds = AppDatabase.getAppDatabase(context).showDao().getAllShowIds()
+
+        val combinedList = movieIds.toMutableList()
+        combinedList.addAll(showIds)
+
+        return combinedList.toList()
+    }
+
 }
