@@ -56,9 +56,9 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
         super.onViewCreated(view, savedInstanceState)
 
         //Bind Views
-        loadingProgressBar = view.findViewById(R.id.pb_loading)
+        loadingProgressBar = view.findViewById(R.id.pb_discover)
         recyclerView = view.findViewById(R.id.rv_media)
-        tabLayout = view.findViewById(R.id.tl_discover_fragment)
+        tabLayout = view.findViewById(R.id.tl_discover)
 
         recyclerView.adapter = MediaListAdapter(this)
         adapter = recyclerView.adapter as MediaListAdapter

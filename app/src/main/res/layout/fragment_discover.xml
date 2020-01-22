@@ -17,7 +17,7 @@
             app:title="@string/navigation_bar_discover_title" />
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tl_discover_fragment"
+            android:id="@+id/tl_discover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabGravity="fill"
@@ -48,7 +48,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/pb_loading"
+        android:id="@+id/pb_discover"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
