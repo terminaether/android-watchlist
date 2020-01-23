@@ -4,6 +4,9 @@ import android.content.Context
 import codes.terminaether.watchlist.WatchlistApplication
 import codes.terminaether.watchlist.data.database.AppDatabase
 import codes.terminaether.watchlist.data.model.ApiResult
+import codes.terminaether.watchlist.data.model.Media
+import codes.terminaether.watchlist.data.model.Movie
+import codes.terminaether.watchlist.data.model.Show
 
 /**
  * Handles saving media to the app's database, and contains methods for retrieving saved media.
@@ -14,10 +17,34 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
 
     private val detailsService = WatchlistApplication.INSTANCE.networkComponent.getDetailsService()
 
+    suspend fun insertMedia(media: Media) {
+        when (media) {
+            is Movie -> insertMovie(media.id)
+            is Show -> insertShow(media.id)
+        }
+    }
+
+    fun deleteMedia(media: Media) {
+        when (media) {
+            is Movie -> AppDatabase.getAppDatabase(context).movieDao().deleteMovieById(media.id)
+            is Show -> AppDatabase.getAppDatabase(context).showDao().deleteShowById(media.id)
+        }
+    }
+
+    /**
+     * Returns a combined list of all Movie and Show IDs stored in the database.
+     */
+    fun getMediaIds(): List<Int> {
+        val movieIds = AppDatabase.getAppDatabase(context).movieDao().getAllMovieIds()
+        val showIds = AppDatabase.getAppDatabase(context).showDao().getAllShowIds()
+
+        return movieIds.union(showIds).toList()
+    }
+
     /**
      * Fetch a Movie's full details and save to local database.
      */
-    suspend fun insertMovie(movieId: Int) {
+    private suspend fun insertMovie(movieId: Int) {
         val response = safeApiCall(
             call = { detailsService.getMovieDetails(movieId).await() },
             errorMessage = "Error Getting Details for Movie"
@@ -36,7 +63,7 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
     /**
      * Fetch a Show's full details and save to local database.
      */
-    suspend fun insertShow(showId: Int) {
+    private suspend fun insertShow(showId: Int) {
         val response = safeApiCall(
             call = { detailsService.getShowDetails(showId).await() },
             errorMessage = "Error Getting Details for Show"
@@ -50,24 +77,6 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
                 }
             }
         }
-    }
-
-    fun deleteMovie(movieId: Int) {
-        AppDatabase.getAppDatabase(context).movieDao().deleteMovieById(movieId)
-    }
-
-    fun deleteShow(showId: Int) {
-        AppDatabase.getAppDatabase(context).showDao().deleteShowById(showId)
-    }
-
-    /**
-     * Returns a combined list of all Movie and Show IDs stored in the database.
-     */
-    fun getMediaIds(): List<Int> {
-        val movieIds = AppDatabase.getAppDatabase(context).movieDao().getAllMovieIds()
-        val showIds = AppDatabase.getAppDatabase(context).showDao().getAllShowIds()
-
-        return movieIds.union(showIds).toList()
     }
 
 }

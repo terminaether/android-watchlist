@@ -5,8 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import codes.terminaether.watchlist.data.model.Media
-import codes.terminaether.watchlist.data.model.Movie
-import codes.terminaether.watchlist.data.model.Show
 import codes.terminaether.watchlist.data.model.UiState
 import codes.terminaether.watchlist.data.repo.SavedMediaRepository
 import codes.terminaether.watchlist.feature.discover.data.repo.DiscoverRepository
@@ -60,20 +58,10 @@ class DiscoverViewModel @Inject constructor(
 
     fun toggleMediaSaved(itemPosition: Int) {
         val media = mediaList[itemPosition]
-
         viewModelScope.launch(Dispatchers.IO) {
-            if (media is Movie) {
-                if (media.isSaved) {
-                    SavedMediaRepository(getApplication()).deleteMovie(media.id)
-                } else {
-                    SavedMediaRepository(getApplication()).insertMovie(media.id)
-                }
-            } else if (media is Show) {
-                if (media.isSaved) {
-                    SavedMediaRepository(getApplication()).deleteShow(media.id)
-                } else {
-                    SavedMediaRepository(getApplication()).insertShow(media.id)
-                }
+            when {
+                media.isSaved -> SavedMediaRepository(getApplication()).deleteMedia(media)
+                else -> SavedMediaRepository(getApplication()).insertMedia(media)
             }
         }
     }
