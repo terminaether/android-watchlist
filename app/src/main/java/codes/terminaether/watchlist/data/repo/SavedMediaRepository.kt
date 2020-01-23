@@ -59,10 +59,7 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
         val movieIds = AppDatabase.getAppDatabase(context).movieDao().getAllMovieIds()
         val showIds = AppDatabase.getAppDatabase(context).showDao().getAllShowIds()
 
-        val combinedList = movieIds.toMutableList()
-        combinedList.addAll(showIds)
-
-        return combinedList.toList()
+        return movieIds.union(showIds).toList()
     }
 
 }
