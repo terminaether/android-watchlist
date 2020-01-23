@@ -17,6 +17,9 @@ interface ShowDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertShow(show: Show)
 
+    @Query("DELETE FROM Show where id = :id")
+    fun deleteShowById(id: Int)
+
     @Query("SELECT id from Show")
     fun getAllShowIds(): List<Int>
 
