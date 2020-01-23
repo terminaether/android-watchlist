@@ -29,7 +29,7 @@ open class Media(
      * The ID for this Media within TMDb.
      */
     @PrimaryKey(autoGenerate = false)
-    var id: Int? = null,
+    var id: Int = 0,
 
     /**
      * Private parameter used to signify whether or not an item is saved locally.

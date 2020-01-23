@@ -73,7 +73,7 @@ class DiscoverRepository(private val context: Context) : BaseRepository() {
      */
     private fun removeInvalidData(dataSet: List<Media>): List<Media> {
         val cleanDataSet = dataSet.toMutableList()
-        cleanDataSet.removeAll { it.id == null }
+        cleanDataSet.removeAll { it.id == 0 }
         cleanDataSet.removeAll { it.posterPath.isNullOrBlank() }
 
         val iterator = cleanDataSet.iterator()
