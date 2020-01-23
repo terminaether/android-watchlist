@@ -38,8 +38,11 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
         discoverViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST") // as T
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                //TODO (Code): Find a safer way of providing application to ViewModel
-                return DiscoverViewModel(DiscoverRepository(), activity!!.application) as T
+                //TODO (Code): Find a safer way of providing context, and application to ViewModel
+                return DiscoverViewModel(
+                    DiscoverRepository(this@DiscoverFragment.context!!),
+                    activity!!.application
+                ) as T
             }
         })[DiscoverViewModel::class.java]
     }

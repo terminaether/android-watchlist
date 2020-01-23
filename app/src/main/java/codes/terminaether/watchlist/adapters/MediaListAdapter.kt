@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -89,8 +90,13 @@ class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
             overviewSubString += "."
             overview.text = overviewSubString
 
-            //TODO (UI): Set image resource based on item's presence in database
+            //Indicate an item's presence in the local database
             save.setOnClickListener(this)
+            if (media.isSaved) {
+                save.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_save_filled))
+            } else {
+                save.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_save_empty))
+            }
         }
 
         override fun onClick(p0: View?) {
