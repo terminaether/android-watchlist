@@ -32,6 +32,12 @@ open class Media(
     var id: Int? = null,
 
     /**
+     * Private parameter used to signify whether or not an item is saved locally.
+     */
+    @Ignore
+    var isSaved: Boolean = false,
+
+    /**
      * ISO 639-1 code.
      * @see [List of ISO 639-1 Codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
      */
