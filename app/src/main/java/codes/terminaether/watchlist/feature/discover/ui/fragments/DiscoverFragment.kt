@@ -92,7 +92,7 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
     }
 
     override fun onListItemSaveClick(itemPosition: Int) {
-        discoverViewModel.saveMedia(itemPosition)
+        discoverViewModel.toggleMediaSaved(itemPosition)
     }
 
     private fun handleDiscoverData(discoverResponse: UiState<List<Media>>) {

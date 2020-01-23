@@ -52,6 +52,14 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
         }
     }
 
+    fun deleteMovie(movieId: Int) {
+        AppDatabase.getAppDatabase(context).movieDao().deleteMovieById(movieId)
+    }
+
+    fun deleteShow(showId: Int) {
+        AppDatabase.getAppDatabase(context).showDao().deleteShowById(showId)
+    }
+
     /**
      * Returns a combined list of all Movie and Show IDs stored in the database.
      */

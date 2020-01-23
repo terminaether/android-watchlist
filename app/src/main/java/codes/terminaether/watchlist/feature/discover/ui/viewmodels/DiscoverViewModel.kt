@@ -58,18 +58,24 @@ class DiscoverViewModel @Inject constructor(
         }
     }
 
-    fun saveMedia(itemPosition: Int) {
+    fun toggleMediaSaved(itemPosition: Int) {
         val media = mediaList[itemPosition]
         //ID is guaranteed to be non-null
         val mediaId = media.id
 
-        if (media is Movie) {
-            viewModelScope.launch(Dispatchers.IO) {
-                SavedMediaRepository(getApplication()).insertMovie(mediaId!!)
-            }
-        } else if (media is Show) {
-            viewModelScope.launch(Dispatchers.IO) {
-                SavedMediaRepository(getApplication()).insertShow(mediaId!!)
+        viewModelScope.launch(Dispatchers.IO) {
+            if (media is Movie) {
+                if (media.isSaved) {
+                    SavedMediaRepository(getApplication()).deleteMovie(mediaId!!)
+                } else {
+                    SavedMediaRepository(getApplication()).insertMovie(mediaId!!)
+                }
+            } else if (media is Show) {
+                if (media.isSaved) {
+                    SavedMediaRepository(getApplication()).deleteShow(mediaId!!)
+                } else {
+                    SavedMediaRepository(getApplication()).insertShow(mediaId!!)
+                }
             }
         }
     }
