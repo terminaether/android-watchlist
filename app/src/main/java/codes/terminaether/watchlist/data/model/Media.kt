@@ -3,7 +3,6 @@ package codes.terminaether.watchlist.data.model
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -14,6 +13,10 @@ import com.google.gson.annotations.SerializedName
 //TODO (Refactor): Add source flags (SAVED, SEARCH, DISCOVER) and type (isMovie)
 @Entity
 data class Media(
+    //region Non-API Variables
+    var isSaved: Boolean = false,
+    //endregion
+
     //region Shared API Variables
     /**
      * The path parameter to be supplied to `https://image.tmdb.org/t/p/{size}/{path}` in order to
@@ -189,21 +192,21 @@ data class Media(
     val isMovie: Boolean
         get() = !title.isNullOrBlank()
 
-    @Expose(serialize = false, deserialize = false)
-    var isFromDiscover: Boolean = false
-
-    @Expose(serialize = false, deserialize = false)
-    var isFromSearch: Boolean = false
-
-    @Expose(serialize = false, deserialize = false)
-    var isSaved: Boolean = false
-
     val mediaTitle: String?
         get() {
             return if (isMovie) {
                 title
             } else {
                 name
+            }
+        }
+
+    val originalMediaTitle: String?
+        get() {
+            return if (isMovie) {
+                originalTitle
+            } else {
+                originalName
             }
         }
 }
