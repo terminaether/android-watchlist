@@ -68,12 +68,7 @@ class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
             poster.load("https://image.tmdb.org/t/p/w342" + media.posterPath)
 
             //Populate the item's title
-            val titleText: String? = if (media.isMovie) {
-                media.title
-            } else {
-                media.name
-            }
-            title.text = titleText
+            title.text = media.mediaTitle
 
             //Populate the item's overview via a shortened string, handle empty overviews
             var overviewSubString = media.overview?.substringBefore(".")

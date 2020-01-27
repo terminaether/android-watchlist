@@ -13,21 +13,7 @@ import com.google.gson.annotations.SerializedName
  */
 //TODO (Refactor): Add source flags (SAVED, SEARCH, DISCOVER) and type (isMovie)
 @Entity
-class Media(
-    //region Non-API Variables
-    @Expose(serialize = false, deserialize = false)
-    var isMovie: Boolean = true,
-
-    @Expose(serialize = false, deserialize = false)
-    var isFromDiscover: Boolean = false,
-
-    @Expose(serialize = false, deserialize = false)
-    var isFromSearch: Boolean = false,
-
-    @Expose(serialize = false, deserialize = false)
-    var isSaved: Boolean = false,
-    //endregion
-
+data class Media(
     //region Shared API Variables
     /**
      * The path parameter to be supplied to `https://image.tmdb.org/t/p/{size}/{path}` in order to
@@ -148,7 +134,7 @@ class Media(
      */
     @SerializedName("episode_run_time")
     @Ignore
-    var episodeRuntime: IntArray? = null,
+    var episodeRuntime: List<Int>? = listOf(),
 
     /**
      * Formatted as YYYY-MM-DD.
@@ -164,7 +150,7 @@ class Media(
      * @see [List of ISO 639-1 Codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
      */
     @Ignore
-    var languages: Array<String>? = null,
+    var languages: List<String>? = listOf(),
 
     /**
      * Formatted as YYYY-MM-DD.
@@ -189,7 +175,7 @@ class Media(
      */
     @SerializedName("origin_country")
     @Ignore
-    var originCountry: Array<String>? = null,
+    var originCountry: List<String>? = listOf(),
 
     @SerializedName("original_name")
     var originalName: String? = null,
@@ -199,5 +185,25 @@ class Media(
      */
     var type: String? = null
     //endregion
+) {
+    val isMovie: Boolean
+        get() = !title.isNullOrBlank()
 
-)
+    @Expose(serialize = false, deserialize = false)
+    var isFromDiscover: Boolean = false
+
+    @Expose(serialize = false, deserialize = false)
+    var isFromSearch: Boolean = false
+
+    @Expose(serialize = false, deserialize = false)
+    var isSaved: Boolean = false
+
+    val mediaTitle: String?
+        get() {
+            return if (isMovie) {
+                title
+            } else {
+                name
+            }
+        }
+}
