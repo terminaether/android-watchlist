@@ -1,7 +1,6 @@
 package codes.terminaether.watchlist.feature.discover.data.repo
 
 import android.content.Context
-import android.util.Log
 import codes.terminaether.watchlist.WatchlistApplication
 import codes.terminaether.watchlist.data.model.ApiResult
 import codes.terminaether.watchlist.data.model.Media
@@ -21,7 +20,6 @@ class DiscoverRepository(private val context: Context) : BaseRepository() {
 
     //TODO (Code): Media returned should be observable
     suspend fun discoverMovies(): UiState<List<Media>> {
-        Log.d("Attention", "Calling")
         val response = safeApiCall(
             call = { discoverService.discoverMovies().await() },
             errorMessage = "Error Discovering Movies"
@@ -29,13 +27,11 @@ class DiscoverRepository(private val context: Context) : BaseRepository() {
 
         return when (response) {
             is ApiResult.Success -> {
-                Log.d("Attention", "Success")
                 val cleanDataSet = removeInvalidData(response.data.results)
                 val markedDataSet = markSavedData(cleanDataSet)
                 UiState.Success(markedDataSet)
             }
             is ApiResult.Error -> {
-                Log.d("Attention", "No Bueno")
                 UiState.Error(response.exception)
             }
         }
