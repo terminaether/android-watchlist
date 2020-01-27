@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import codes.terminaether.watchlist.R
 import codes.terminaether.watchlist.data.model.Media
-import codes.terminaether.watchlist.data.model.Movie
-import codes.terminaether.watchlist.data.model.Show
 import coil.api.load
 
 /**
@@ -70,9 +68,11 @@ class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
             poster.load("https://image.tmdb.org/t/p/w342" + media.posterPath)
 
             //Populate the item's title
-            var titleText: String? = null
-            if (media is Movie) titleText = media.title
-            if (media is Show) titleText = media.name
+            val titleText: String? = if (media.isMovie) {
+                media.title
+            } else {
+                media.name
+            }
             title.text = titleText
 
             //Populate the item's overview via a shortened string, handle empty overviews
