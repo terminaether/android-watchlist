@@ -19,6 +19,7 @@ import java.util.concurrent.Executors
 @Database(entities = [Movie::class, Show::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
+    //TODO (Refactor): Single MediaDao
     abstract fun movieDao(): MovieDao
     abstract fun showDao(): ShowDao
 

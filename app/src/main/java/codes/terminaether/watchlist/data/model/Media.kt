@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName
  *
  * Created by terminaether on 2020-01-10.
  */
+//TODO (Refactor): Add source flags (SAVED, SEARCH, DISCOVER) and type (isMovie)
 open class Media(
     /**
      * The path parameter to be supplied to `https://image.tmdb.org/t/p/{size}/{path}` in order to
@@ -28,6 +29,8 @@ open class Media(
     /**
      * The ID for this Media within TMDb.
      */
+    //TODO (Refactor): Media ID can no longer be primary key due to multiple versions of same media
+    // from different sources
     @PrimaryKey(autoGenerate = false)
     var id: Int = 0,
 

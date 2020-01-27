@@ -13,10 +13,12 @@ import codes.terminaether.watchlist.data.model.Show
  *
  * Created by terminaether on 2020-01-16.
  */
+//TODO (Refactor): Convert to singular MediaDatabase
 class SavedMediaRepository(private val context: Context) : BaseRepository() {
 
     private val detailsService = WatchlistApplication.INSTANCE.networkComponent.getDetailsService()
 
+    //TODO (Refactor): Insert with flag; SAVED, SEARCH, DISCOVER
     suspend fun insertMedia(media: Media) {
         when (media) {
             is Movie -> insertMovie(media.id)
@@ -34,6 +36,7 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
     /**
      * Returns a combined list of all Movie and Show IDs stored in the database.
      */
+    //TODO (Refactor): getSavedMediaIds (Method may not be necessary)
     fun getMediaIds(): List<Int> {
         val movieIds = AppDatabase.getAppDatabase(context).movieDao().getAllMovieIds()
         val showIds = AppDatabase.getAppDatabase(context).showDao().getAllShowIds()
