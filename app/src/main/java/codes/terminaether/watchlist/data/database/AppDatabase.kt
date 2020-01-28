@@ -6,17 +6,19 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import codes.terminaether.watchlist.data.database.dao.MediaDao
 import codes.terminaether.watchlist.data.model.Media
+import codes.terminaether.watchlist.feature.discover.data.database.dao.DiscoverDao
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 /**
- * Abstract database class which provides a singleton connection this app's SQL Lite database.
+ * Abstract database class which provides a singleton connection to this app's SQL Lite database.
  *
  * Created by terminaether on 2020-01-15.
  */
 @Database(entities = [Media::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
+    abstract fun discoverDao(): DiscoverDao
     abstract fun mediaDao(): MediaDao
 
     companion object {
