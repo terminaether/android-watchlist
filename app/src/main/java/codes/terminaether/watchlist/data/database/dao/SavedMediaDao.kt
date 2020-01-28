@@ -7,20 +7,20 @@ import androidx.room.Query
 import codes.terminaether.watchlist.data.model.Media
 
 /**
- * TODO (Documentation): Add file description.
+ * Access object for the Saved Media table of the App's database.
  *
  * Created by terminaether on 2020-01-27.
  */
 @Dao
-interface MediaDao {
+interface SavedMediaDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMedia(media: Media)
+    fun saveMedia(media: Media)
 
     @Query("DELETE FROM Media where id = :id")
     fun deleteMediaById(id: Int)
 
     @Query("SELECT id FROM Media")
-    fun getMediaIds(): List<Int>
+    fun getSavedMediaIds(): List<Int>
 
 }

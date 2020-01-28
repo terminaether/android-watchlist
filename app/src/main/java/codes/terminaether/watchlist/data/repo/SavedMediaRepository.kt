@@ -34,7 +34,7 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
      */
     //TODO (Refactor): getSavedMediaIds (Method may not be necessary)
     fun getMediaIds(): List<Int> {
-        return AppDatabase.getAppDatabase(context).mediaDao().getMediaIds()
+        return AppDatabase.getAppDatabase(context).mediaDao().getSavedMediaIds()
     }
 
     /**
@@ -50,7 +50,7 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
         when (response) {
             is ApiResult.Success -> {
                 AppDatabase.DATABASE_WRITER.execute {
-                    AppDatabase.getAppDatabase(context).mediaDao().insertMedia(response.data)
+                    AppDatabase.getAppDatabase(context).mediaDao().saveMedia(response.data)
                 }
             }
         }
@@ -69,7 +69,7 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
         when (response) {
             is ApiResult.Success -> {
                 AppDatabase.DATABASE_WRITER.execute {
-                    AppDatabase.getAppDatabase(context).mediaDao().insertMedia(response.data)
+                    AppDatabase.getAppDatabase(context).mediaDao().saveMedia(response.data)
                 }
             }
         }
