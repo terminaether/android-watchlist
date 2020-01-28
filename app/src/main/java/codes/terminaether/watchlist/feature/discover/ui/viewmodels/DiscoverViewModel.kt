@@ -28,24 +28,10 @@ class DiscoverViewModel @Inject constructor(
 
     val discoverResult = MutableLiveData<UiState<List<Media>>>()
 
-    fun fetchMovies() {
+    fun discover(discoverMovies: Boolean, forceUpdate: Boolean) {
         discoverResult.value = UiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            val result = repo.discoverMovies()
-            when (result) {
-                is UiState.Success -> {
-                    mediaList = result.data
-                }
-            }
-
-            discoverResult.postValue(result)
-        }
-    }
-
-    fun fetchShows() {
-        discoverResult.value = UiState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = repo.discoverShows()
+            val result = repo.discoverMedia(discoverMovies, forceUpdate)
             when (result) {
                 is UiState.Success -> {
                     mediaList = result.data

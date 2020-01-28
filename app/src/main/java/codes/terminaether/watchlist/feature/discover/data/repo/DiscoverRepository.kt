@@ -2,71 +2,61 @@ package codes.terminaether.watchlist.feature.discover.data.repo
 
 import android.content.Context
 import codes.terminaether.watchlist.WatchlistApplication
+import codes.terminaether.watchlist.data.database.AppDatabase
 import codes.terminaether.watchlist.data.model.ApiResult
 import codes.terminaether.watchlist.data.model.Media
 import codes.terminaether.watchlist.data.model.UiState
 import codes.terminaether.watchlist.data.repo.BaseRepository
-import codes.terminaether.watchlist.data.repo.SavedMediaRepository
+import codes.terminaether.watchlist.feature.discover.data.model.DiscoverResponse
 
 /**
  * Allows the app to use multiple data sources for the Discover feed.
  *
  * Created by terminaether on 2020-01-03.
  */
-class DiscoverRepository(private val context: Context) : BaseRepository() {
+class DiscoverRepository(context: Context) : BaseRepository() {
 
+    private val discoverDao = AppDatabase.getAppDatabase(context).discoverDao()
     private val discoverService =
         WatchlistApplication.INSTANCE.networkComponent.getDiscoverService()
 
-    //TODO (Code): Media returned should be observable
-    suspend fun discoverMovies(): UiState<List<Media>> {
-        val response = safeApiCall(
-            call = { discoverService.discoverMovies().await() },
-            errorMessage = "Error Discovering Movies"
-        )
+    //TODO (Code): Media returned should be observable?
+    suspend fun discoverMedia(
+        discoverMovies: Boolean,
+        forceUpdate: Boolean
+    ): UiState<List<Media>> {
+        val discoverResults: List<Media> = if (discoverMovies) {
+            discoverDao.getDiscoverMovieResults()
+        } else {
+            discoverDao.getDiscoverShowResults()
+        }
+
+        if (discoverResults.isNotEmpty() && !forceUpdate) {
+            return UiState.Success(discoverResults)
+        }
+
+        val response: ApiResult<DiscoverResponse<Media>> = if (discoverMovies) {
+            safeApiCall(
+                call = { discoverService.discoverMovies().await() },
+                errorMessage = "Error Discovering Movies"
+            )
+        } else {
+            safeApiCall(
+                call = { discoverService.discoverShows().await() },
+                errorMessage = "Error Discovering Shows"
+            )
+        }
 
         return when (response) {
             is ApiResult.Success -> {
                 val cleanDataSet = removeInvalidData(response.data.results)
-                val markedDataSet = markSavedData(cleanDataSet)
-                UiState.Success(markedDataSet)
+                discoverDao.insertDiscoverResults(cleanDataSet)
+                UiState.Success(cleanDataSet)
             }
             is ApiResult.Error -> {
                 UiState.Error(response.exception)
             }
         }
-    }
-
-    suspend fun discoverShows(): UiState<List<Media>> {
-        val response = safeApiCall(
-            call = { discoverService.discoverShows().await() },
-            errorMessage = "Error Discovering Shows"
-        )
-
-        return when (response) {
-            is ApiResult.Success -> {
-                val cleanDataSet = removeInvalidData(response.data.results)
-                val markedDataSet = markSavedData(cleanDataSet)
-                UiState.Success(markedDataSet)
-            }
-            is ApiResult.Error -> {
-                UiState.Error(response.exception)
-            }
-        }
-    }
-
-    /**
-     * Marks Media items that are saved locally.
-     * With thanks to Aaron.
-     */
-    private fun markSavedData(dataSet: List<Media>): List<Media> {
-        val savedIds = SavedMediaRepository(context).getMediaIds()
-        val iterator = dataSet.iterator()
-        iterator.forEach {
-            if (savedIds.contains(it.id)) it.isSaved = true
-        }
-
-        return dataSet
     }
 
     /**

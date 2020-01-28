@@ -78,9 +78,9 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val tabText = tab!!.text
                 if (tabText == getString(R.string.tab_item_movies)) {
-                    discoverViewModel.fetchMovies()
+                    discoverViewModel.discover(discoverMovies = true, forceUpdate = false)
                 } else if (tabText == getString(R.string.tab_item_shows)) {
-                    discoverViewModel.fetchShows()
+                    discoverViewModel.discover(discoverMovies = false, forceUpdate = false)
                 }
             }
         })
@@ -88,7 +88,7 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
         discoverViewModel.discoverResult.observe(
             viewLifecycleOwner,
             Observer<UiState<List<Media>>> { this.handleDiscoverData(it) })
-        discoverViewModel.fetchMovies()
+        discoverViewModel.discover(discoverMovies = true, forceUpdate = false)
     }
 
     override fun onListItemSaveClick(itemPosition: Int) {
