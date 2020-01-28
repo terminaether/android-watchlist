@@ -203,4 +203,24 @@ data class Media(
                 originalName
             }
         }
+
+    /**
+     * Shortens the Media overview for use in Discover and Saved feeds.
+     */
+    fun getConciseOverview(): String {
+        var overviewSubString = overview?.substringBefore(".")
+        if (!overviewSubString.isNullOrBlank()) {
+            if (overviewSubString.length <= 60) {
+                overviewSubString += "."
+                //If the overview is too short, extend to the end of the next sentence
+                val extendedSubString = overview!!.substringAfter(".")
+                overviewSubString += extendedSubString.substringBefore(".")
+            }
+        } else {
+            return ""
+        }
+        overviewSubString += "."
+
+        return overviewSubString
+    }
 }

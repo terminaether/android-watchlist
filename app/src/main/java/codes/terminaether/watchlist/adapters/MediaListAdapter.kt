@@ -71,19 +71,11 @@ class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
             title.text = media.mediaTitle
 
             //Populate the item's overview via a shortened string, handle empty overviews
-            var overviewSubString = media.overview?.substringBefore(".")
-            if (!overviewSubString.isNullOrBlank()) {
-                if (overviewSubString.length <= 60) {
-                    overviewSubString += "."
-                    //If the overview is too short, extend to the end of the next sentence
-                    val extendedSubString = media.overview!!.substringAfter(".")
-                    overviewSubString += extendedSubString.substringBefore(".")
-                }
-            } else {
-                overviewSubString = context.getString(R.string.list_item_empty_overview)
+            var conciseOverview = media.getConciseOverview()
+            if (conciseOverview.isBlank()) {
+                conciseOverview = context.getString(R.string.list_item_empty_overview)
             }
-            overviewSubString += "."
-            overview.text = overviewSubString
+            overview.text = conciseOverview
 
             //Indicate an item's presence in the local database
             save.setOnClickListener(this)
