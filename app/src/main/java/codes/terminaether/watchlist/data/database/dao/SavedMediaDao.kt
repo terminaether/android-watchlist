@@ -15,7 +15,7 @@ import codes.terminaether.watchlist.data.model.Media
 interface SavedMediaDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveMedia(media: Media)
+    fun insertMedia(media: Media)
 
     @Query("DELETE FROM Media where id = :id")
     fun deleteMediaById(id: Int)

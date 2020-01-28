@@ -11,12 +11,11 @@ import codes.terminaether.watchlist.data.model.Media
  *
  * Created by terminaether on 2020-01-16.
  */
-//TODO (Refactor): Convert to singular MediaRepository
 class SavedMediaRepository(private val context: Context) : BaseRepository() {
 
     private val detailsService = WatchlistApplication.INSTANCE.networkComponent.getDetailsService()
 
-    //TODO (Refactor): Insert with flag; SAVED, SEARCH, DISCOVER
+    //TODO (Refactor): Insert with flag; SAVED, SEARCH, DISCOVER?
     suspend fun insertMedia(media: Media) {
         if (media.isMovie) {
             insertMovie(media.id)
@@ -32,8 +31,7 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
     /**
      * Returns a combined list of all Movie and Show IDs stored in the database.
      */
-    //TODO (Refactor): getSavedMediaIds (Method may not be necessary)
-    fun getMediaIds(): List<Int> {
+    fun getSavedMediaIds(): List<Int> {
         return AppDatabase.getAppDatabase(context).mediaDao().getSavedMediaIds()
     }
 
@@ -50,7 +48,7 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
         when (response) {
             is ApiResult.Success -> {
                 AppDatabase.DATABASE_WRITER.execute {
-                    AppDatabase.getAppDatabase(context).mediaDao().saveMedia(response.data)
+                    AppDatabase.getAppDatabase(context).mediaDao().insertMedia(response.data)
                 }
             }
         }
@@ -69,7 +67,7 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
         when (response) {
             is ApiResult.Success -> {
                 AppDatabase.DATABASE_WRITER.execute {
-                    AppDatabase.getAppDatabase(context).mediaDao().saveMedia(response.data)
+                    AppDatabase.getAppDatabase(context).mediaDao().insertMedia(response.data)
                 }
             }
         }
