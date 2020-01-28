@@ -4,9 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import codes.terminaether.watchlist.data.database.dao.SavedMediaDao
+import codes.terminaether.watchlist.data.database.dao.MediaDao
 import codes.terminaether.watchlist.data.model.Media
-import codes.terminaether.watchlist.feature.discover.data.database.dao.DiscoverDao
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -18,8 +17,7 @@ import java.util.concurrent.Executors
 @Database(entities = [Media::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun discoverDao(): DiscoverDao
-    abstract fun mediaDao(): SavedMediaDao
+    abstract fun mediaDao(): MediaDao
 
     companion object {
         private var INSTANCE: AppDatabase? = null

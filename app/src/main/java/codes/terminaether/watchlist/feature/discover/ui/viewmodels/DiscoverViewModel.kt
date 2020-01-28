@@ -47,7 +47,7 @@ class DiscoverViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             when {
                 media.isSaved -> SavedMediaRepository(getApplication()).deleteMedia(media)
-                else -> SavedMediaRepository(getApplication()).insertMedia(media)
+                else -> SavedMediaRepository(getApplication()).saveMedia(media)
             }
         }
     }

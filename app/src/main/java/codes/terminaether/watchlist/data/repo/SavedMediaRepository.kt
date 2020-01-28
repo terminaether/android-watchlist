@@ -15,19 +15,6 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
 
     private val detailsService = WatchlistApplication.INSTANCE.networkComponent.getDetailsService()
 
-    //TODO (Refactor): Insert with flag; SAVED, SEARCH, DISCOVER?
-    suspend fun insertMedia(media: Media) {
-        if (media.isMovie) {
-            insertMovie(media.id)
-        } else {
-            insertShow(media.id)
-        }
-    }
-
-    fun deleteMedia(media: Media) {
-        AppDatabase.getAppDatabase(context).mediaDao().deleteMediaById(media.id)
-    }
-
     /**
      * Returns a combined list of all Movie and Show IDs stored in the database.
      */
@@ -36,41 +23,35 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
     }
 
     /**
-     * Fetch a Movie's full details and save to local database.
+     * Fetch a Media object's full details and update the local database.
      */
-    private suspend fun insertMovie(movieId: Int) {
-        val response = safeApiCall(
-            call = { detailsService.getMovieDetails(movieId).await() },
-            errorMessage = "Error Getting Details for Movie"
-        )
+    suspend fun saveMedia(media: Media) {
+        val detailsResponse: ApiResult<Media> = if (media.isMovie) {
+            safeApiCall(
+                call = { detailsService.getMovieDetails(media.id).await() },
+                errorMessage = "Error Getting Details for Movie"
+            )
+        } else {
+            safeApiCall(
+                call = { detailsService.getShowDetails(media.id).await() },
+                errorMessage = "Error Getting Details for Show"
+            )
+        }
 
-        //TODO (UX): Use JobScheduler to try save Movie again
-        when (response) {
+        //TODO (UX): Use JobScheduler to try save Show again
+        when (detailsResponse) {
             is ApiResult.Success -> {
                 AppDatabase.DATABASE_WRITER.execute {
-                    AppDatabase.getAppDatabase(context).mediaDao().insertMedia(response.data)
+                    val fullMedia = detailsResponse.data
+                    fullMedia.isSaved = true
+                    AppDatabase.getAppDatabase(context).mediaDao().updateMedia(fullMedia)
                 }
             }
         }
     }
 
-    /**
-     * Fetch a Show's full details and save to local database.
-     */
-    private suspend fun insertShow(showId: Int) {
-        val response = safeApiCall(
-            call = { detailsService.getShowDetails(showId).await() },
-            errorMessage = "Error Getting Details for Show"
-        )
-
-        //TODO (UX): Use JobScheduler to try save Show again
-        when (response) {
-            is ApiResult.Success -> {
-                AppDatabase.DATABASE_WRITER.execute {
-                    AppDatabase.getAppDatabase(context).mediaDao().insertMedia(response.data)
-                }
-            }
-        }
+    fun deleteMedia(media: Media) {
+        AppDatabase.getAppDatabase(context).mediaDao().deleteMediaById(media.id)
     }
 
 }

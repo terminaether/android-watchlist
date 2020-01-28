@@ -16,7 +16,7 @@ import codes.terminaether.watchlist.feature.discover.data.model.DiscoverResponse
  */
 class DiscoverRepository(context: Context) : BaseRepository() {
 
-    private val discoverDao = AppDatabase.getAppDatabase(context).discoverDao()
+    private val mediaDao = AppDatabase.getAppDatabase(context).mediaDao()
     private val discoverService =
         WatchlistApplication.INSTANCE.networkComponent.getDiscoverService()
 
@@ -26,9 +26,9 @@ class DiscoverRepository(context: Context) : BaseRepository() {
         forceUpdate: Boolean
     ): UiState<List<Media>> {
         val discoverResults: List<Media> = if (discoverMovies) {
-            discoverDao.getDiscoverMovieResults()
+            mediaDao.getDiscoverMovieResults()
         } else {
-            discoverDao.getDiscoverShowResults()
+            mediaDao.getDiscoverShowResults()
         }
 
         if (discoverResults.isNotEmpty() && !forceUpdate) {
@@ -50,7 +50,7 @@ class DiscoverRepository(context: Context) : BaseRepository() {
         return when (response) {
             is ApiResult.Success -> {
                 val cleanDataSet = removeInvalidData(response.data.results)
-                discoverDao.insertDiscoverResults(cleanDataSet)
+                mediaDao.insertDiscoverResults(cleanDataSet)
                 UiState.Success(cleanDataSet)
             }
             is ApiResult.Error -> {

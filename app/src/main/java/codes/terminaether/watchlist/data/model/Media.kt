@@ -10,7 +10,6 @@ import com.google.gson.annotations.SerializedName
  *
  * Created by terminaether on 2020-01-10.
  */
-//TODO (Refactor): Add source flags (SAVED, SEARCH, DISCOVER) and type (isMovie)
 @Entity
 data class Media(
     //region Non-API Variables
@@ -36,8 +35,6 @@ data class Media(
     /**
      * The ID for this Media within TMDb.
      */
-    //TODO (Refactor): Media ID can no longer be primary key due to multiple versions of same media
-    // from different sources
     @PrimaryKey(autoGenerate = false)
     var id: Int = 0,
 
@@ -53,8 +50,7 @@ data class Media(
     /**
      * Any number from 0 to 'infinite' representing this Show's relative popularity.
      */
-    @Ignore
-    var popularity: Number? = 0,
+    var popularity: Double? = 0.0,
 
     /**
      * The path parameter to be supplied to `https://image.tmdb.org/t/p/{size}/{path}` in order to
@@ -67,15 +63,13 @@ data class Media(
      * For a Movie, one of: Rumored, Planned, In Production, Post Production, Released, Canceled.
      * For a Show, one of: Planned, In Production, Pilot, Returning Series, Ended, Canceled.
      */
-    //TODO (UX): Add enums for search parameters?
     var status: String? = null,
 
     /**
      * The average user rating, from 0.0 to 10.0.
      */
     @SerializedName("vote_average")
-    @Ignore
-    var voteAverage: Number? = 0,
+    var voteAverage: Double? = 0.0,
 
     /**
      * The number of individual votes/ratings cast on this Media.
