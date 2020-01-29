@@ -14,10 +14,10 @@ interface MediaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertDiscoverResults(media: List<Media>)
 
-    @Query("SELECT * FROM Media WHERE title != null ORDER BY popularity DESC")
+    @Query("SELECT * FROM Media WHERE title NOT null ORDER BY popularity DESC")
     fun getDiscoverMovieResults(): List<Media>
 
-    @Query("SELECT * FROM Media WHERE name != null ORDER BY popularity DESC")
+    @Query("SELECT * FROM Media WHERE name NOT null ORDER BY popularity DESC")
     fun getDiscoverShowResults(): List<Media>
 
     @Query("SELECT id FROM Media")
