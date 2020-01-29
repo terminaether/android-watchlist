@@ -46,7 +46,7 @@ class DiscoverViewModel @Inject constructor(
         val media = mediaList[itemPosition]
         viewModelScope.launch(Dispatchers.IO) {
             when {
-                media.isSaved -> SavedMediaRepository(getApplication()).deleteMedia(media)
+                media.isSaved -> SavedMediaRepository(getApplication()).unsaveMedia(media)
                 else -> SavedMediaRepository(getApplication()).saveMedia(media)
             }
         }

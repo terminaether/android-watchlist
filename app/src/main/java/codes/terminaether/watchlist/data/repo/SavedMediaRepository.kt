@@ -50,6 +50,11 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
         }
     }
 
+    fun unsaveMedia(media: Media) {
+        media.isSaved = false
+        AppDatabase.getAppDatabase(context).mediaDao().updateMedia(media)
+    }
+
     fun deleteMedia(media: Media) {
         AppDatabase.getAppDatabase(context).mediaDao().deleteMediaById(media.id)
     }
