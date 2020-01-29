@@ -2,13 +2,14 @@ package codes.terminaether.watchlist.feature.discover.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import codes.terminaether.watchlist.data.model.Media
-import codes.terminaether.watchlist.data.model.UiState
 import codes.terminaether.watchlist.data.repo.SavedMediaRepository
 import codes.terminaether.watchlist.feature.discover.data.repo.DiscoverRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,26 +25,29 @@ class DiscoverViewModel @Inject constructor(
     AndroidViewModel(application) {
 
     //Private reference to repository data for quick saving to SavedMediaRepository
-    private lateinit var mediaList: List<Media>
+    private var mediaList: List<Media>? = listOf()
 
-    val discoverResult = MutableLiveData<UiState<List<Media>>>()
+    val observableMediaList: LiveData<List<Media>> = liveData {
+        var discoverResults: List<Media> = listOf()
+        while (true) {
+            viewModelScope.launch(Dispatchers.IO) {
+                discoverResults = repo.discoverMedia(discoverMovies = true, forceUpdate = false)
+            }
+            mediaList = discoverResults
+            emit(discoverResults)
+            delay(5000)
+        }
+    }
 
     fun discover(discoverMovies: Boolean, forceUpdate: Boolean) {
-        discoverResult.value = UiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            val result = repo.discoverMedia(discoverMovies, forceUpdate)
-            when (result) {
-                is UiState.Success -> {
-                    mediaList = result.data
-                }
-            }
 
-            discoverResult.postValue(result)
         }
     }
 
     fun toggleMediaSaved(itemPosition: Int) {
-        val media = mediaList[itemPosition]
+        if (mediaList.isNullOrEmpty()) return
+        val media = mediaList!![itemPosition]
         viewModelScope.launch(Dispatchers.IO) {
             when {
                 media.isSaved -> SavedMediaRepository(getApplication()).unsaveMedia(media)

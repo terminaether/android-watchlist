@@ -1,5 +1,6 @@
 package codes.terminaether.watchlist.data.database.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import codes.terminaether.watchlist.data.model.Media
 
