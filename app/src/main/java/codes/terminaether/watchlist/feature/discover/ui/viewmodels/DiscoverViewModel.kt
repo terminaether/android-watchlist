@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import codes.terminaether.watchlist.data.model.Media
 import codes.terminaether.watchlist.data.repo.MediaRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
@@ -72,7 +71,7 @@ class DiscoverViewModel @Inject constructor(
     }
 
     fun toggleMediaSaved(media: Media) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             when {
                 media.isSaved -> MediaRepository(getApplication()).unsaveMedia(media)
                 else -> MediaRepository(getApplication()).saveMedia(media)

@@ -6,8 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import codes.terminaether.watchlist.data.database.dao.MediaDao
 import codes.terminaether.watchlist.data.model.Media
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 /**
  * Abstract database class which provides a singleton connection to this app's SQL Lite database.
@@ -21,9 +19,6 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         private var INSTANCE: AppDatabase? = null
-        private var NUMBER_OF_THREADS = 4
-
-        var DATABASE_WRITER: ExecutorService = Executors.newFixedThreadPool(NUMBER_OF_THREADS)
 
         fun getAppDatabase(context: Context): AppDatabase {
             if (INSTANCE == null) {

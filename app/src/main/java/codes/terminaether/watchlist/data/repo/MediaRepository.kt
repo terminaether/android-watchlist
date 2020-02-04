@@ -31,7 +31,8 @@ class MediaRepository(private val context: Context) : BaseRepository() {
      */
     suspend fun refreshDiscoverResults(discoverMovies: Boolean) {
         //TODO (Database): Only update if the contents of the database are older than X
-        val response: ApiResult<DiscoverResponse<Media>> = if (discoverMovies) {
+        //TODO (Localisation): Localise discoverService error messages
+        val discoverResponse: ApiResult<DiscoverResponse<Media>> = if (discoverMovies) {
             safeApiCall(
                 call = { discoverService.discoverMovies().await() },
                 errorMessage = "Error Discovering Movies"
@@ -43,14 +44,14 @@ class MediaRepository(private val context: Context) : BaseRepository() {
             )
         }
 
-        when (response) {
+        when (discoverResponse) {
             is ApiResult.Success -> {
-                val cleanDataSet = removeInvalidData(response.data.results)
+                val cleanDataSet = removeInvalidData(discoverResponse.data.results)
                 //TODO (Database): UPSERT rather than INSERT
                 mediaDao.insertDiscoverResults(cleanDataSet)
             }
             is ApiResult.Error -> {
-                throw response.exception
+                throw discoverResponse.exception
             }
         }
     }
@@ -59,7 +60,7 @@ class MediaRepository(private val context: Context) : BaseRepository() {
      * Fetch a Media object's full details and update the local database.
      */
     suspend fun saveMedia(media: Media) {
-        //TODO (Localisation): Localise error messages
+        //TODO (Localisation): Localise detailsService error messages
         val detailsResponse: ApiResult<Media> = if (media.isMovie) {
             safeApiCall(
                 call = { detailsService.getMovieDetails(media.id).await() },
@@ -75,17 +76,18 @@ class MediaRepository(private val context: Context) : BaseRepository() {
         //TODO (UX): Use JobScheduler to try save Show again
         when (detailsResponse) {
             is ApiResult.Success -> {
-                AppDatabase.DATABASE_WRITER.execute {
-                    val fullMedia = detailsResponse.data
-                    fullMedia.isSaved = true
-                    AppDatabase.getAppDatabase(context).mediaDao().updateMedia(fullMedia)
-                }
+                val fullMedia = detailsResponse.data
+                fullMedia.isSaved = true
+                AppDatabase.getAppDatabase(context).mediaDao().updateMedia(fullMedia)
+            }
+            is ApiResult.Error -> {
+                throw detailsResponse.exception
             }
         }
     }
 
     //TODO (Database): Items are updated, but list is not refreshed
-    fun unsaveMedia(media: Media) {
+    suspend fun unsaveMedia(media: Media) {
         media.isSaved = false
         AppDatabase.getAppDatabase(context).mediaDao().updateMedia(media)
     }
