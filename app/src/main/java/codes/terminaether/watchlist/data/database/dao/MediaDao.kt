@@ -9,17 +9,18 @@ import codes.terminaether.watchlist.data.model.Media
  *
  * Created by terminaether on 2020-01-27.
  */
+//TODO (Database): Convert all functions to suspend functions
 @Dao
 interface MediaDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertDiscoverResults(media: List<Media>)
+    suspend fun insertDiscoverResults(media: List<Media>)
 
-    @Query("SELECT * FROM Media WHERE title NOT null ORDER BY popularity DESC")
-    fun getDiscoverMovieResults(): List<Media>
+    @get:Query("SELECT * FROM Media WHERE title NOT null ORDER BY popularity DESC")
+    val discoverMovieResults: LiveData<List<Media>>
 
-    @Query("SELECT * FROM Media WHERE name NOT null ORDER BY popularity DESC")
-    fun getDiscoverShowResults(): List<Media>
+    @get:Query("SELECT * FROM Media WHERE name NOT null ORDER BY popularity DESC")
+    val discoverShowResults: LiveData<List<Media>>
 
     @Query("SELECT id FROM Media")
     fun getMediaIds(): List<Int>

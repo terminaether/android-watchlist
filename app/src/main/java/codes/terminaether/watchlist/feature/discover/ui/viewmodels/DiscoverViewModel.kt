@@ -3,14 +3,14 @@ package codes.terminaether.watchlist.feature.discover.ui.viewmodels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import codes.terminaether.watchlist.data.model.Media
 import codes.terminaether.watchlist.data.repo.SavedMediaRepository
 import codes.terminaether.watchlist.feature.discover.data.repo.DiscoverRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 /**
@@ -24,34 +24,56 @@ class DiscoverViewModel @Inject constructor(
 ) :
     AndroidViewModel(application) {
 
-    //Private reference to repository data for quick saving to SavedMediaRepository
-    private var mediaList: List<Media>? = listOf()
+    private val _isLoading = MutableLiveData<Boolean>()
+    private val _snackbar = MutableLiveData<String?>()
 
-    val observableMediaList: LiveData<List<Media>> = liveData {
-        var discoverResults: List<Media> = listOf()
-        while (true) {
-            viewModelScope.launch(Dispatchers.IO) {
-                discoverResults = repo.discoverMedia(discoverMovies = true, forceUpdate = false)
-            }
-            mediaList = discoverResults
-            emit(discoverResults)
-            delay(5000)
+    /**
+     * Signals the UI to display a spinner if true.
+     */
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+    val movieList = repo.discoverMovieList
+    val showList = repo.discoverShowList
+    /**
+     * Signals the UI to display a Snackbar with any error messages encountered.
+     */
+    val snackbar: LiveData<String?>
+        get() = _snackbar
+
+    var isObservingMovies = true
+
+    /**
+     * Clears the stored error message once the UI has displayed it.
+     */
+    fun onSnackbarShown() {
+        _snackbar.value = null
+    }
+
+    fun refreshDiscoverResults(discoverMovies: Boolean) {
+        isObservingMovies = discoverMovies
+        launchDataLoad {
+            repo.refreshDiscoverResults(discoverMovies)
         }
     }
 
-    fun discover(discoverMovies: Boolean, forceUpdate: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-
-        }
-    }
-
-    fun toggleMediaSaved(itemPosition: Int) {
-        if (mediaList.isNullOrEmpty()) return
-        val media = mediaList!![itemPosition]
+    fun toggleMediaSaved(media: Media) {
         viewModelScope.launch(Dispatchers.IO) {
             when {
                 media.isSaved -> SavedMediaRepository(getApplication()).unsaveMedia(media)
                 else -> SavedMediaRepository(getApplication()).saveMedia(media)
+            }
+        }
+    }
+
+    private fun launchDataLoad(block: suspend () -> Unit) {
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+                block()
+            } catch (error: IOException) {
+                _snackbar.value = error.message
+            } finally {
+                _isLoading.value = false
             }
         }
     }

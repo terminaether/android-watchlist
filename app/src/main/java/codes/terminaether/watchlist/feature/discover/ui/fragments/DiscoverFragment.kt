@@ -1,7 +1,6 @@
 package codes.terminaether.watchlist.feature.discover.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import codes.terminaether.watchlist.adapters.MediaListAdapter
 import codes.terminaether.watchlist.data.model.Media
 import codes.terminaether.watchlist.feature.discover.data.repo.DiscoverRepository
 import codes.terminaether.watchlist.feature.discover.ui.viewmodels.DiscoverViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 
 /**
@@ -78,40 +78,44 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val tabText = tab!!.text
                 if (tabText == getString(R.string.tab_item_movies)) {
-                    //discoverViewModel.discover(discoverMovies = true, forceUpdate = false)
+                    discoverViewModel.refreshDiscoverResults(true)
                 } else if (tabText == getString(R.string.tab_item_shows)) {
-                    //discoverViewModel.discover(discoverMovies = false, forceUpdate = false)
+                    discoverViewModel.refreshDiscoverResults(false)
                 }
             }
         })
 
-        discoverViewModel.observableMediaList.observe(
+        discoverViewModel.isLoading.observe(viewLifecycleOwner, Observer { showProgress(it) })
+
+        discoverViewModel.movieList.observe(
             viewLifecycleOwner,
-            Observer { handleDiscoverData(it) })
-        //discoverViewModel.discover(discoverMovies = true, forceUpdate = false)
+            Observer { handleDiscoverData(it, true) })
+        discoverViewModel.showList.observe(
+            viewLifecycleOwner,
+            Observer { handleDiscoverData(it, false) })
+
+        discoverViewModel.snackbar.observe(
+            viewLifecycleOwner,
+            Observer { text ->
+                text?.let {
+                    Snackbar.make(view, text, Snackbar.LENGTH_LONG).show()
+                    discoverViewModel.onSnackbarShown()
+                }
+            })
+
+        discoverViewModel.refreshDiscoverResults(true)
     }
 
-    override fun onListItemSaveClick(itemPosition: Int) {
-        discoverViewModel.toggleMediaSaved(itemPosition)
+    override fun onListItemSaveClick(media: Media) {
+        discoverViewModel.toggleMediaSaved(media)
     }
 
-    private fun handleDiscoverData(discoverResponse: List<Media>) {
-        Log.d("Attention", "Handling")
-        adapter.swapData(discoverResponse)
-        showProgress(false)
-//        when (discoverResponse) {
-//            is UiState.Success -> {
-//                adapter.swapData(discoverResponse.data)
-//                showProgress(false)
-//            }
-//            is UiState.Loading -> {
-//                showProgress(true)
-//            }
-//            is UiState.Error -> {
-//                showProgress(false)
-//                //TODO (UI): Display an error message to the user
-//            }
-//        }
+    private fun handleDiscoverData(discoverResponse: List<Media>, isMovieResponse: Boolean) {
+        if (isMovieResponse && discoverViewModel.isObservingMovies) {
+            adapter.swapData(discoverResponse)
+        } else if (!isMovieResponse && !discoverViewModel.isObservingMovies) {
+            adapter.swapData(discoverResponse)
+        }
     }
 
     private fun showProgress(isLoading: Boolean) {

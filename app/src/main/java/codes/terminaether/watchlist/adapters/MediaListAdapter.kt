@@ -87,12 +87,12 @@ class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
         }
 
         override fun onClick(p0: View?) {
-            mediaSaveListener.onListItemSaveClick(adapterPosition)
+            mediaSaveListener.onListItemSaveClick(getItem(adapterPosition))
         }
     }
 
     interface MediaSaveListener {
-        fun onListItemSaveClick(itemPosition: Int)
+        fun onListItemSaveClick(media: Media)
     }
 
 }
