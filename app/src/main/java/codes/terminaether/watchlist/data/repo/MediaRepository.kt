@@ -47,8 +47,7 @@ class MediaRepository(private val context: Context) : BaseRepository() {
         when (discoverResponse) {
             is ApiResult.Success -> {
                 val cleanDataSet = removeInvalidData(discoverResponse.data.results)
-                //TODO (Database): UPSERT rather than INSERT
-                mediaDao.insertDiscoverResults(cleanDataSet)
+                mediaDao.upsertAll(cleanDataSet)
             }
             is ApiResult.Error -> {
                 throw discoverResponse.exception
@@ -78,7 +77,7 @@ class MediaRepository(private val context: Context) : BaseRepository() {
             is ApiResult.Success -> {
                 val fullMedia = detailsResponse.data
                 fullMedia.isSaved = true
-                AppDatabase.getAppDatabase(context).mediaDao().updateMedia(fullMedia)
+                AppDatabase.getAppDatabase(context).mediaDao().update(fullMedia)
             }
             is ApiResult.Error -> {
                 throw detailsResponse.exception
@@ -89,7 +88,7 @@ class MediaRepository(private val context: Context) : BaseRepository() {
     //TODO (Database): Items are updated, but list is not refreshed
     suspend fun unsaveMedia(media: Media) {
         media.isSaved = false
-        AppDatabase.getAppDatabase(context).mediaDao().updateMedia(media)
+        AppDatabase.getAppDatabase(context).mediaDao().update(media)
     }
 
     /**
