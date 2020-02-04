@@ -6,8 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import codes.terminaether.watchlist.data.model.Media
-import codes.terminaether.watchlist.data.repo.SavedMediaRepository
-import codes.terminaether.watchlist.feature.discover.data.repo.DiscoverRepository
+import codes.terminaether.watchlist.data.repo.MediaRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -19,7 +18,7 @@ import javax.inject.Inject
  * Created by terminaether on 2020-01-06.
  */
 class DiscoverViewModel @Inject constructor(
-    private val repo: DiscoverRepository,
+    private val repo: MediaRepository,
     application: Application
 ) :
     AndroidViewModel(application) {
@@ -75,8 +74,8 @@ class DiscoverViewModel @Inject constructor(
     fun toggleMediaSaved(media: Media) {
         viewModelScope.launch(Dispatchers.IO) {
             when {
-                media.isSaved -> SavedMediaRepository(getApplication()).unsaveMedia(media)
-                else -> SavedMediaRepository(getApplication()).saveMedia(media)
+                media.isSaved -> MediaRepository(getApplication()).unsaveMedia(media)
+                else -> MediaRepository(getApplication()).saveMedia(media)
             }
         }
     }

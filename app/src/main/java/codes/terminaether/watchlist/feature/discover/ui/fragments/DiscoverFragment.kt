@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import codes.terminaether.watchlist.R
 import codes.terminaether.watchlist.adapters.MediaListAdapter
 import codes.terminaether.watchlist.data.model.Media
-import codes.terminaether.watchlist.feature.discover.data.repo.DiscoverRepository
+import codes.terminaether.watchlist.data.repo.MediaRepository
 import codes.terminaether.watchlist.feature.discover.ui.viewmodels.DiscoverViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -41,7 +41,7 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 //TODO (Code): Find a safer way of providing context, and application to ViewModel
                 return DiscoverViewModel(
-                    DiscoverRepository(this@DiscoverFragment.context!!),
+                    MediaRepository(this@DiscoverFragment.context!!),
                     activity!!.application
                 ) as T
             }

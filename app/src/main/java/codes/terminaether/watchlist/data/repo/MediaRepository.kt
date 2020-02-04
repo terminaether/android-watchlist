@@ -1,21 +1,25 @@
-package codes.terminaether.watchlist.feature.discover.data.repo
+package codes.terminaether.watchlist.data.repo
 
 import android.content.Context
 import codes.terminaether.watchlist.WatchlistApplication
 import codes.terminaether.watchlist.data.database.AppDatabase
 import codes.terminaether.watchlist.data.model.ApiResult
 import codes.terminaether.watchlist.data.model.Media
-import codes.terminaether.watchlist.data.repo.BaseRepository
 import codes.terminaether.watchlist.feature.discover.data.model.DiscoverResponse
 
 /**
- * Allows the app to use multiple data sources for the Discover feed.
+ * Handles all database and networking operations for the app, and acts as a single source of truth
+ * for Media. Contains methods for:
+ * - Fetching popular media from TMDb
+ * - Saving media to the app's local database
+ * - Retrieving saved media from the app's local database
  *
- * Created by terminaether on 2020-01-03.
+ * Created by terminaether on 2020-01-16.
  */
-class DiscoverRepository(context: Context) : BaseRepository() {
+class MediaRepository(private val context: Context) : BaseRepository() {
 
     private val mediaDao = AppDatabase.getAppDatabase(context).mediaDao()
+    private val detailsService = WatchlistApplication.INSTANCE.networkComponent.getDetailsService()
     private val discoverService =
         WatchlistApplication.INSTANCE.networkComponent.getDiscoverService()
 
@@ -49,6 +53,41 @@ class DiscoverRepository(context: Context) : BaseRepository() {
                 throw response.exception
             }
         }
+    }
+
+    /**
+     * Fetch a Media object's full details and update the local database.
+     */
+    suspend fun saveMedia(media: Media) {
+        //TODO (Localisation): Localise error messages
+        val detailsResponse: ApiResult<Media> = if (media.isMovie) {
+            safeApiCall(
+                call = { detailsService.getMovieDetails(media.id).await() },
+                errorMessage = "Error Getting Details for Movie"
+            )
+        } else {
+            safeApiCall(
+                call = { detailsService.getShowDetails(media.id).await() },
+                errorMessage = "Error Getting Details for Show"
+            )
+        }
+
+        //TODO (UX): Use JobScheduler to try save Show again
+        when (detailsResponse) {
+            is ApiResult.Success -> {
+                AppDatabase.DATABASE_WRITER.execute {
+                    val fullMedia = detailsResponse.data
+                    fullMedia.isSaved = true
+                    AppDatabase.getAppDatabase(context).mediaDao().updateMedia(fullMedia)
+                }
+            }
+        }
+    }
+
+    //TODO (Database): Items are updated, but list is not refreshed
+    fun unsaveMedia(media: Media) {
+        media.isSaved = false
+        AppDatabase.getAppDatabase(context).mediaDao().updateMedia(media)
     }
 
     /**
