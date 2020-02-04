@@ -14,7 +14,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 /**
- * ViewModel to store and manage Discover data.
+ * ViewModel to store and manage Discover, loading and error data.
  *
  * Created by terminaether on 2020-01-06.
  */
@@ -25,34 +25,50 @@ class DiscoverViewModel @Inject constructor(
     AndroidViewModel(application) {
 
     private val _isLoading = MutableLiveData<Boolean>()
-    private val _snackbar = MutableLiveData<String?>()
+    private val _errorMessage = MutableLiveData<String?>()
 
     /**
-     * Signals the UI to display a spinner if true.
+     * Observable used to signal the UI to display a spinner if true.
      */
     val isLoading: LiveData<Boolean>
         get() = _isLoading
+    /**
+     * Observable used to signal the UI to display a Snackbar with any error messages encountered.
+     */
+    val errorMessage: LiveData<String?>
+        get() = _errorMessage
+
+    //Observable Media lists
     val movieList = repo.discoverMovieList
     val showList = repo.discoverShowList
-    /**
-     * Signals the UI to display a Snackbar with any error messages encountered.
-     */
-    val snackbar: LiveData<String?>
-        get() = _snackbar
 
+    /**
+     * Used to tell the UI which list to respond to once their contents change.
+     */
     var isObservingMovies = true
 
     /**
      * Clears the stored error message once the UI has displayed it.
      */
     fun onSnackbarShown() {
-        _snackbar.value = null
+        _errorMessage.value = null
     }
 
+    /**
+     * Sets the source of media being observed before launching a data refresh via an API call.
+     * This method also handles updating loading status and error messages.
+     */
     fun refreshDiscoverResults(discoverMovies: Boolean) {
         isObservingMovies = discoverMovies
-        launchDataLoad {
-            repo.refreshDiscoverResults(discoverMovies)
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+                repo.refreshDiscoverResults(discoverMovies)
+            } catch (error: IOException) {
+                _errorMessage.value = error.message
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
@@ -61,19 +77,6 @@ class DiscoverViewModel @Inject constructor(
             when {
                 media.isSaved -> SavedMediaRepository(getApplication()).unsaveMedia(media)
                 else -> SavedMediaRepository(getApplication()).saveMedia(media)
-            }
-        }
-    }
-
-    private fun launchDataLoad(block: suspend () -> Unit) {
-        viewModelScope.launch {
-            try {
-                _isLoading.value = true
-                block()
-            } catch (error: IOException) {
-                _snackbar.value = error.message
-            } finally {
-                _isLoading.value = false
             }
         }
     }

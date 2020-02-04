@@ -35,6 +35,7 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         discoverViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST") // as T
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -63,9 +64,11 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
         recyclerView = view.findViewById(R.id.rv_media)
         tabLayout = view.findViewById(R.id.tl_discover)
 
+        //Create and set RecyclerView's Adapter
         recyclerView.adapter = MediaListAdapter(this)
         adapter = recyclerView.adapter as MediaListAdapter
 
+        //Set listener for TabLayout
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 recyclerView.smoothScrollToPosition(0)
@@ -85,24 +88,28 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
             }
         })
 
-        discoverViewModel.isLoading.observe(viewLifecycleOwner, Observer { showProgress(it) })
+        //Observe ViewModel variables
+        discoverViewModel.isLoading.observe(
+            viewLifecycleOwner,
+            Observer { showLoadingProgress(it) })
 
         discoverViewModel.movieList.observe(
             viewLifecycleOwner,
-            Observer { handleDiscoverData(it, true) })
+            Observer { movieList -> handleDiscoverData(movieList, true) })
         discoverViewModel.showList.observe(
             viewLifecycleOwner,
-            Observer { handleDiscoverData(it, false) })
+            Observer { showList -> handleDiscoverData(showList, false) })
 
-        discoverViewModel.snackbar.observe(
+        discoverViewModel.errorMessage.observe(
             viewLifecycleOwner,
-            Observer { text ->
-                text?.let {
-                    Snackbar.make(view, text, Snackbar.LENGTH_LONG).show()
+            Observer { errorMessage ->
+                errorMessage?.let {
+                    Snackbar.make(view, errorMessage, Snackbar.LENGTH_LONG).show()
                     discoverViewModel.onSnackbarShown()
                 }
             })
 
+        //Refresh the contents of the database when the app starts
         discoverViewModel.refreshDiscoverResults(true)
     }
 
@@ -110,15 +117,16 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
         discoverViewModel.toggleMediaSaved(media)
     }
 
-    private fun handleDiscoverData(discoverResponse: List<Media>, isMovieResponse: Boolean) {
-        if (isMovieResponse && discoverViewModel.isObservingMovies) {
-            adapter.swapData(discoverResponse)
-        } else if (!isMovieResponse && !discoverViewModel.isObservingMovies) {
-            adapter.swapData(discoverResponse)
+    private fun handleDiscoverData(mediaList: List<Media>, isMovieList: Boolean) {
+        //Only respond to list updates of the correct type
+        if (isMovieList && discoverViewModel.isObservingMovies) {
+            adapter.swapData(mediaList)
+        } else if (!isMovieList && !discoverViewModel.isObservingMovies) {
+            adapter.swapData(mediaList)
         }
     }
 
-    private fun showProgress(isLoading: Boolean) {
+    private fun showLoadingProgress(isLoading: Boolean) {
         if (isLoading) {
             loadingProgressBar.show()
             recyclerView.visibility = View.INVISIBLE

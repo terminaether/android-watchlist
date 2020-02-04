@@ -16,16 +16,10 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
     private val detailsService = WatchlistApplication.INSTANCE.networkComponent.getDetailsService()
 
     /**
-     * Returns a combined list of all Movie and Show IDs stored in the database.
-     */
-    fun getSavedMediaIds(): List<Int> {
-        return AppDatabase.getAppDatabase(context).mediaDao().getSavedMediaIds()
-    }
-
-    /**
      * Fetch a Media object's full details and update the local database.
      */
     suspend fun saveMedia(media: Media) {
+        //TODO (Localisation): Localise error messages
         val detailsResponse: ApiResult<Media> = if (media.isMovie) {
             safeApiCall(
                 call = { detailsService.getMovieDetails(media.id).await() },
@@ -53,10 +47,6 @@ class SavedMediaRepository(private val context: Context) : BaseRepository() {
     fun unsaveMedia(media: Media) {
         media.isSaved = false
         AppDatabase.getAppDatabase(context).mediaDao().updateMedia(media)
-    }
-
-    fun deleteMedia(media: Media) {
-        AppDatabase.getAppDatabase(context).mediaDao().deleteMediaById(media.id)
     }
 
 }

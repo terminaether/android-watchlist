@@ -22,7 +22,11 @@ class DiscoverRepository(context: Context) : BaseRepository() {
     val discoverMovieList = mediaDao.discoverMovieResults
     val discoverShowList = mediaDao.discoverShowResults
 
+    /**
+     * Updates the local database by making a call to TMDb's Discover endpoint.
+     */
     suspend fun refreshDiscoverResults(discoverMovies: Boolean) {
+        //TODO (Database): Only update if the contents of the database are older than X
         val response: ApiResult<DiscoverResponse<Media>> = if (discoverMovies) {
             safeApiCall(
                 call = { discoverService.discoverMovies().await() },
