@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import codes.terminaether.watchlist.feature.discover.ui.fragments.DiscoverFragment
 import codes.terminaether.watchlist.feature.saved.ui.fragments.SavedFragment
 import codes.terminaether.watchlist.feature.trailers.ui.fragments.TrailersFragment
-import kotlinx.android.synthetic.main.activity_main.*
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
  * TODO (Documentation): Add file description.
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         loadFragment(DiscoverFragment())
-        bottom_nav.setOnNavigationItemSelectedListener {
+        findViewById<BottomNavigationView>(R.id.bottom_nav).setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.discover -> {
                     loadFragment(DiscoverFragment())
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
+        transaction.replace(R.id.fl_container, fragment)
         transaction.commit()
     }
 
