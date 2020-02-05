@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -39,10 +38,6 @@ class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
 
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
         holder.bind(getItem(position))
-    }
-
-    override fun submitList(@Nullable list: List<Media?>?) {
-        super.submitList(list?.let { ArrayList(it) })
     }
 
     private class MediaDiffCallback : DiffUtil.ItemCallback<Media>() {
