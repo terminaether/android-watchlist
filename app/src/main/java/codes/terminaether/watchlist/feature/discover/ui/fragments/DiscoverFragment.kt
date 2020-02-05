@@ -120,9 +120,9 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
     private fun handleDiscoverData(mediaList: List<Media>, isMovieList: Boolean) {
         //Only respond to list updates of the correct type
         if (isMovieList && discoverViewModel.isObservingMovies) {
-            adapter.swapData(mediaList)
+            adapter.submitList(mediaList)
         } else if (!isMovieList && !discoverViewModel.isObservingMovies) {
-            adapter.swapData(mediaList)
+            adapter.submitList(mediaList)
         }
     }
 

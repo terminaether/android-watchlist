@@ -205,6 +205,14 @@ data class Media(
         }
 
     /**
+     * Returns a string which includes all the drawable elements of a Media item.
+     * Used for equality operators in RecyclerView adapters.
+     */
+    fun describeDrawableContents(): String {
+        return "$posterPath, $mediaTitle, ${getConciseOverview()}, $isSaved"
+    }
+
+    /**
      * Shortens the Media overview for use in Discover and Saved feeds.
      */
     fun getConciseOverview(): String {
@@ -223,4 +231,5 @@ data class Media(
 
         return overviewSubString
     }
+
 }

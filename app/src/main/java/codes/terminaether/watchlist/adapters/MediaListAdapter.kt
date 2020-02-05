@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import codes.terminaether.watchlist.R
 import codes.terminaether.watchlist.data.model.Media
 import coil.api.load
+
 
 /**
  * ListAdapter responsible for Media items to be displayed in a RecyclerView.
@@ -39,17 +41,17 @@ class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
         holder.bind(getItem(position))
     }
 
-    fun swapData(data: List<Media>) {
-        submitList(data.toMutableList())
+    override fun submitList(@Nullable list: List<Media?>?) {
+        super.submitList(list?.let { ArrayList(it) })
     }
 
     private class MediaDiffCallback : DiffUtil.ItemCallback<Media>() {
         override fun areItemsTheSame(oldItem: Media, newItem: Media): Boolean {
-            return (oldItem == newItem)
+            return (oldItem.id == newItem.id)
         }
 
         override fun areContentsTheSame(oldItem: Media, newItem: Media): Boolean {
-            return (oldItem.id == newItem.id)
+            return (oldItem.describeDrawableContents() == newItem.describeDrawableContents())
         }
     }
 
@@ -87,7 +89,8 @@ class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
         }
 
         override fun onClick(p0: View?) {
-            mediaSaveListener.onListItemSaveClick(getItem(adapterPosition))
+            //Send a copy of the Media item up the stack, not a reference to the original
+            mediaSaveListener.onListItemSaveClick(getItem(adapterPosition).copy())
         }
     }
 

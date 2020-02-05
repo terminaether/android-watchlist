@@ -85,7 +85,6 @@ class MediaRepository(private val context: Context) : BaseRepository() {
         }
     }
 
-    //TODO (Database): Items are updated, but list is not refreshed
     suspend fun unsaveMedia(media: Media) {
         media.isSaved = false
         AppDatabase.getAppDatabase(context).mediaDao().update(media)
