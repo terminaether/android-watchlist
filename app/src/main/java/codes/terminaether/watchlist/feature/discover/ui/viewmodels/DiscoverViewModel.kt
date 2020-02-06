@@ -9,17 +9,13 @@ import codes.terminaether.watchlist.data.model.Media
 import codes.terminaether.watchlist.data.repo.MediaRepository
 import kotlinx.coroutines.launch
 import java.io.IOException
-import javax.inject.Inject
 
 /**
  * ViewModel to store and manage Discover data, loading states and any associated errors.
  *
  * Created by terminaether on 2020-01-06.
  */
-class DiscoverViewModel @Inject constructor(
-    private val repo: MediaRepository,
-    application: Application
-) :
+class DiscoverViewModel(private val repo: MediaRepository, application: Application) :
     AndroidViewModel(application) {
 
     private val _isLoading = MutableLiveData<Boolean>()
