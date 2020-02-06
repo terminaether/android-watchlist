@@ -16,10 +16,10 @@ interface MediaDao {
     suspend fun insertAll(media: List<Media>): List<Long>
 
     @get:Query("SELECT * FROM Media WHERE title NOT null ORDER BY popularity DESC")
-    val discoverMovieResults: LiveData<List<Media>>
+    val popularMoviesList: LiveData<List<Media>>
 
     @get:Query("SELECT * FROM Media WHERE name NOT null ORDER BY popularity DESC")
-    val discoverShowResults: LiveData<List<Media>>
+    val popularShowsList: LiveData<List<Media>>
 
     @get:Query("SELECT id FROM Media WHERE isSaved = 1")
     val savedMediaIds: List<Int>

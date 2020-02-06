@@ -9,10 +9,7 @@ import codes.terminaether.watchlist.feature.discover.data.model.DiscoverResponse
 
 /**
  * Handles all database and networking operations for the app, and acts as a single source of truth
- * for Media. Contains methods for:
- * - Fetching popular media from TMDb
- * - Saving media to the app's local database
- * - Retrieving saved media from the app's local database
+ * for displayable content.
  *
  * Created by terminaether on 2020-01-16.
  */
@@ -23,24 +20,25 @@ class MediaRepository(private val context: Context) : BaseRepository() {
     private val discoverService =
         WatchlistApplication.INSTANCE.networkComponent.getDiscoverService()
 
-    val discoverMovieList = mediaDao.discoverMovieResults
-    val discoverShowList = mediaDao.discoverShowResults
+    val popularMoviesList = mediaDao.popularMoviesList
+    val popularShowsList = mediaDao.popularShowsList
     val savedMediaList = mediaDao.savedMediaResults
 
     /**
-     * Updates the local database by making a call to TMDb's Discover endpoint.
+     * Updates the local database by making a call to TMDb's Discover endpoint and inserting the
+     * results, if valid.
      */
-    suspend fun refreshDiscoverResults(discoverMovies: Boolean) {
+    suspend fun refreshDatabase(refreshMovies: Boolean) {
         //TODO (Database): Only update if the contents of the database are older than X
         //TODO (Localisation): Localise discoverService error messages
-        val discoverResponse: ApiResult<DiscoverResponse<Media>> = if (discoverMovies) {
+        val discoverResponse: ApiResult<DiscoverResponse<Media>> = if (refreshMovies) {
             safeApiCall(
-                call = { discoverService.discoverMovies().await() },
+                call = { discoverService.discoverPopularMovies().await() },
                 errorMessage = "Unable to refresh popular movies"
             )
         } else {
             safeApiCall(
-                call = { discoverService.discoverShows().await() },
+                call = { discoverService.discoverPopularShows().await() },
                 errorMessage = "Unable to refresh popular shows"
             )
         }

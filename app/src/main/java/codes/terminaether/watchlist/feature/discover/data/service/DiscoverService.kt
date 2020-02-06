@@ -14,9 +14,9 @@ import retrofit2.http.GET
 interface DiscoverService {
 
     @GET("discover/movie")
-    fun discoverMovies(): Deferred<Response<DiscoverResponse<Media>>>
+    fun discoverPopularMovies(): Deferred<Response<DiscoverResponse<Media>>>
 
     @GET("discover/tv")
-    fun discoverShows(): Deferred<Response<DiscoverResponse<Media>>>
+    fun discoverPopularShows(): Deferred<Response<DiscoverResponse<Media>>>
 
 }

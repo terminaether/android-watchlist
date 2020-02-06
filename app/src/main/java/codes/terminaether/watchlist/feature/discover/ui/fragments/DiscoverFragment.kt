@@ -60,7 +60,7 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
         super.onViewCreated(view, savedInstanceState)
 
         //Bind Views
-        loadingProgressBar = view.findViewById(R.id.pb_discover)
+        loadingProgressBar = view.findViewById(R.id.pb_loading)
         recyclerView = view.findViewById(R.id.rv_media)
         tabLayout = view.findViewById(R.id.tl_discover)
 
@@ -81,25 +81,22 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val tabText = tab!!.text
                 if (tabText == getString(R.string.tab_item_movies)) {
-                    discoverViewModel.refreshDiscoverFeed(true)
+                    discoverViewModel.refreshDatabase(true)
                 } else if (tabText == getString(R.string.tab_item_shows)) {
-                    discoverViewModel.refreshDiscoverFeed(false)
+                    discoverViewModel.refreshDatabase(false)
                 }
             }
         })
 
-        //Observe ViewModel variables
-        discoverViewModel.isLoading.observe(
+        //Handle loading state
+        discoverViewModel.loading.observe(
             viewLifecycleOwner,
-            Observer { showLoadingProgress(it) })
+            Observer { isLoading ->
+                if (isLoading) loadingProgressBar.show() else loadingProgressBar.hide()
+                recyclerView.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+            })
 
-        discoverViewModel.movieList.observe(
-            viewLifecycleOwner,
-            Observer { movieList -> handleDiscoverData(movieList, true) })
-        discoverViewModel.showList.observe(
-            viewLifecycleOwner,
-            Observer { showList -> handleDiscoverData(showList, false) })
-
+        //Handle API and database operation errors
         discoverViewModel.errorMessage.observe(
             viewLifecycleOwner,
             Observer { errorMessage ->
@@ -109,8 +106,16 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
                 }
             })
 
+        //Observe popular media lists
+        discoverViewModel.popularMoviesList.observe(
+            viewLifecycleOwner,
+            Observer { movieList -> handleDiscoverData(movieList, true) })
+        discoverViewModel.popularShowsList.observe(
+            viewLifecycleOwner,
+            Observer { showList -> handleDiscoverData(showList, false) })
+
         //Refresh the contents of the database when the app starts
-        discoverViewModel.refreshDiscoverFeed(true)
+        discoverViewModel.refreshDatabase(true)
     }
 
     override fun onListItemSaveClick(media: Media) {
@@ -123,16 +128,6 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
             adapter.submitList(mediaList)
         } else if (!isMovieList && !discoverViewModel.isObservingMovies) {
             adapter.submitList(mediaList)
-        }
-    }
-
-    private fun showLoadingProgress(isLoading: Boolean) {
-        if (isLoading) {
-            loadingProgressBar.show()
-            recyclerView.visibility = View.INVISIBLE
-        } else {
-            loadingProgressBar.hide()
-            recyclerView.visibility = View.VISIBLE
         }
     }
 
