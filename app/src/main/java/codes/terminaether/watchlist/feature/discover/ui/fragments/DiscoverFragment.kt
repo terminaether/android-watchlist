@@ -25,7 +25,7 @@ import com.google.android.material.tabs.TabLayout
  *
  * Created by terminaether on 2019-12-19.
  */
-class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
+class DiscoverFragment : Fragment(), MediaListAdapter.MediaFavouriteListener {
 
     private lateinit var adapter: MediaListAdapter
     private lateinit var discoverViewModel: DiscoverViewModel
@@ -118,8 +118,8 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
         discoverViewModel.refreshDatabase(true)
     }
 
-    override fun onListItemSaveClick(media: Media) {
-        discoverViewModel.toggleMediaSaveState(media)
+    override fun onListItemFavouriteClick(media: Media) {
+        discoverViewModel.toggleFavourite(media)
     }
 
     private fun handleDiscoverData(mediaList: List<Media>, isMovieList: Boolean) {

@@ -5,7 +5,7 @@ import androidx.room.*
 import codes.terminaether.watchlist.data.model.Media
 
 /**
- * Access object for the Media table of the App's database.
+ * Access object for the [Media] table of the App's database.
  *
  * Created by terminaether on 2020-01-27.
  */
@@ -21,11 +21,11 @@ interface MediaDao {
     @get:Query("SELECT * FROM Media WHERE name NOT null ORDER BY popularity DESC")
     val popularShowsList: LiveData<List<Media>>
 
-    @get:Query("SELECT id FROM Media WHERE isSaved = 1")
-    val savedMediaIds: List<Int>
+    @get:Query("SELECT id FROM Media WHERE isFavourite = 1")
+    val favouriteIds: List<Int>
 
-    @get:Query("SELECT * FROM Media WHERE isSaved = 1")
-    val savedMediaResults: LiveData<List<Media>>
+    @get:Query("SELECT * FROM Media WHERE isFavourite = 1")
+    val favouritesList: LiveData<List<Media>>
 
     //TODO (Database): Find a way of simplifying this method
     @Transaction
@@ -42,7 +42,7 @@ interface MediaDao {
         //Mark existing Media items that are saved before updating
         val updateListIterator = updateList.iterator()
         updateListIterator.forEach { media ->
-            if (savedMediaIds.contains(media.id)) media.isSaved = true
+            if (favouriteIds.contains(media.id)) media.isFavourite = true
         }
 
         if (!updateList.isNullOrEmpty()) {

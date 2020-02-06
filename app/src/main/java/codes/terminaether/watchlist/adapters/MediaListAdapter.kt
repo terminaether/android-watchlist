@@ -21,18 +21,18 @@ import coil.api.load
  *
  * Created by terminaether on 2020-01-09.
  */
-class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
+class MediaListAdapter(private val mediaFavouriteListener: MediaFavouriteListener) :
     ListAdapter<Media, MediaListAdapter.MediaViewHolder>(MediaDiffCallback()) {
 
     companion object {
         const val PAYLOAD_KEY_POSTER_PATH_CHANGED = "posterPathChanged"
         const val PAYLOAD_KEY_MEDIA_TITLE_CHANGED = "mediaTitleChanged"
         const val PAYLOAD_KEY_CONCISE_OVERVIEW_CHANGED = "conciseOverviewChanged"
-        const val PAYLOAD_KEY_SAVE_STATE_CHANGED = "saveStateChanged"
+        const val PAYLOAD_KEY_FAVOURITE_STATE_CHANGED = "favouriteStateChanged"
     }
 
-    interface MediaSaveListener {
-        fun onListItemSaveClick(media: Media)
+    interface MediaFavouriteListener {
+        fun onListItemFavouriteClick(media: Media)
     }
 
     override fun onCreateViewHolder(
@@ -71,7 +71,7 @@ class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
         private val poster: ImageView = mediaView.findViewById(R.id.poster)
         private val title: TextView = mediaView.findViewById(R.id.title)
         private val overview: TextView = mediaView.findViewById(R.id.overview)
-        private val save: ImageButton = mediaView.findViewById(R.id.save)
+        private val favourite: ImageButton = mediaView.findViewById(R.id.favourite)
 
         fun updateViewUi(media: Media, payloads: MutableList<Any>) {
             val redrawAll = payloads.isNullOrEmpty()
@@ -95,21 +95,21 @@ class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
                 overview.text = conciseOverview
             }
 
-            if (redrawAll || payloadBundle!!.containsKey(PAYLOAD_KEY_SAVE_STATE_CHANGED)) {
+            if (redrawAll || payloadBundle!!.containsKey(PAYLOAD_KEY_FAVOURITE_STATE_CHANGED)) {
                 //Indicate an item's presence in the local database
-                save.setOnClickListener(this)
-                if (media.isSaved) {
-                    save.setImageDrawable(
+                favourite.setOnClickListener(this)
+                if (media.isFavourite) {
+                    favourite.setImageDrawable(
                         ContextCompat.getDrawable(
                             context,
-                            R.drawable.ic_save_filled
+                            R.drawable.ic_favourite_filled
                         )
                     )
                 } else {
-                    save.setImageDrawable(
+                    favourite.setImageDrawable(
                         ContextCompat.getDrawable(
                             context,
-                            R.drawable.ic_save_empty
+                            R.drawable.ic_favourite_empty
                         )
                     )
                 }
@@ -118,7 +118,7 @@ class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
 
         override fun onClick(p0: View?) {
             //Send a copy of the Media item up the stack, not a reference to the original
-            mediaSaveListener.onListItemSaveClick(getItem(adapterPosition).copy())
+            mediaFavouriteListener.onListItemFavouriteClick(getItem(adapterPosition).copy())
         }
     }
 
@@ -142,8 +142,8 @@ class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
             if (oldItem.getConciseOverview() != newItem.getConciseOverview()) {
                 bundle.putBoolean(PAYLOAD_KEY_CONCISE_OVERVIEW_CHANGED, true)
             }
-            if (oldItem.isSaved != newItem.isSaved) {
-                bundle.putBoolean(PAYLOAD_KEY_SAVE_STATE_CHANGED, true)
+            if (oldItem.isFavourite != newItem.isFavourite) {
+                bundle.putBoolean(PAYLOAD_KEY_FAVOURITE_STATE_CHANGED, true)
             }
 
             return bundle

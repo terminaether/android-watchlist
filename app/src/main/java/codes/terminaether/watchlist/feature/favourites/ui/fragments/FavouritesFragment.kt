@@ -1,4 +1,4 @@
-package codes.terminaether.watchlist.feature.saved.ui.fragments
+package codes.terminaether.watchlist.feature.favourites.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,33 +13,33 @@ import codes.terminaether.watchlist.R
 import codes.terminaether.watchlist.adapters.MediaListAdapter
 import codes.terminaether.watchlist.data.model.Media
 import codes.terminaether.watchlist.data.repo.MediaRepository
-import codes.terminaether.watchlist.feature.saved.ui.viewmodels.SavedViewModel
+import codes.terminaether.watchlist.feature.favourites.ui.viewmodels.FavouritesViewModel
 
 /**
- * The Saved screen allows users to view a list of titles they have saved to their watchlist. The
- * screen is separated into two lists containing Movies and TV Shows.
+ * The Favourites screen allows users to view a list of titles they have saved to their Watchlist.
+ * The screen is separated into two lists containing Movies and TV Shows via sticky headers.
  *
  * Created by terminaether on 2019-12-19.
  */
-class SavedFragment : Fragment(), MediaListAdapter.MediaSaveListener {
+class FavouritesFragment : Fragment(), MediaListAdapter.MediaFavouriteListener {
 
     private lateinit var adapter: MediaListAdapter
     private lateinit var recyclerView: RecyclerView
-    private lateinit var savedViewModel: SavedViewModel
+    private lateinit var favouritesViewModel: FavouritesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        savedViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
+        favouritesViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST") // as T
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 //TODO (Code): Find a safer way of providing context, and application to ViewModel
-                return SavedViewModel(
-                    MediaRepository(this@SavedFragment.context!!),
+                return FavouritesViewModel(
+                    MediaRepository(this@FavouritesFragment.context!!),
                     activity!!.application
                 ) as T
             }
-        })[SavedViewModel::class.java]
+        })[FavouritesViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -47,7 +47,7 @@ class SavedFragment : Fragment(), MediaListAdapter.MediaSaveListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_saved, container, false)
+        return inflater.inflate(R.layout.fragment_favourites, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,13 +60,13 @@ class SavedFragment : Fragment(), MediaListAdapter.MediaSaveListener {
         recyclerView.adapter = MediaListAdapter(this)
         adapter = recyclerView.adapter as MediaListAdapter
 
-        savedViewModel.savedMediaList.observe(
+        favouritesViewModel.favouritesList.observe(
             viewLifecycleOwner,
-            Observer { savedMediaList -> adapter.submitList(savedMediaList) })
+            Observer { favouritesList -> adapter.submitList(favouritesList) })
     }
 
-    override fun onListItemSaveClick(media: Media) {
-        savedViewModel.toggleMediaSaveState(media)
+    override fun onListItemFavouriteClick(media: Media) {
+        favouritesViewModel.toggleFavourite(media)
     }
 
 }

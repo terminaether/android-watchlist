@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import codes.terminaether.watchlist.feature.discover.ui.fragments.DiscoverFragment
-import codes.terminaether.watchlist.feature.saved.ui.fragments.SavedFragment
+import codes.terminaether.watchlist.feature.favourites.ui.fragments.FavouritesFragment
 import codes.terminaether.watchlist.feature.trailers.ui.fragments.TrailersFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity() {
                     return@setOnNavigationItemSelectedListener true
                 }
 
-                R.id.saved -> {
-                    loadFragment(SavedFragment())
+                R.id.favourites -> {
+                    loadFragment(FavouritesFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
 

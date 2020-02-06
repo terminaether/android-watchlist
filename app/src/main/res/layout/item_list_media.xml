@@ -57,13 +57,13 @@
             tools:text="During the 1980s, a failed stand-up comedian is driven insane and turns to a life of crime and chaos in Gotham City while becoming an infamous psychopathic crime figure." />
 
         <ImageButton
-            android:id="@+id/save"
+            android:id="@+id/favourite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:paddingEnd="8dp"
             android:paddingBottom="8dp"
-            android:src="@drawable/ic_save_empty"
+            android:src="@drawable/ic_favourite_empty"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

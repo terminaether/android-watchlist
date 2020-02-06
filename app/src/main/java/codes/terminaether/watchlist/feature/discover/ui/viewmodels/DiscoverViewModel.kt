@@ -68,11 +68,11 @@ class DiscoverViewModel(private val repo: MediaRepository, application: Applicat
         }
     }
 
-    fun toggleMediaSaveState(media: Media) {
+    fun toggleFavourite(media: Media) {
         viewModelScope.launch {
             when {
-                media.isSaved -> MediaRepository(getApplication()).unsaveMedia(media)
-                else -> MediaRepository(getApplication()).saveMedia(media)
+                media.isFavourite -> MediaRepository(getApplication()).unfavouriteMedia(media)
+                else -> MediaRepository(getApplication()).favouriteMedia(media)
             }
         }
     }

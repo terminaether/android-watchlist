@@ -6,9 +6,9 @@
         android:title="@string/navigation_bar_discover_title" />
 
     <item
-        android:id="@+id/saved"
-        android:icon="@drawable/ic_saved"
-        android:title="@string/navigation_bar_saved_title" />
+        android:id="@+id/favourites"
+        android:icon="@drawable/ic_favourites"
+        android:title="@string/navigation_bar_favourites_title" />
 
     <item
         android:id="@+id/trailers"

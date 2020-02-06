@@ -13,7 +13,7 @@ import com.google.gson.annotations.SerializedName
 @Entity
 data class Media(
     //region Non-API Variables
-    var isSaved: Boolean = false,
+    var isFavourite: Boolean = false,
     //endregion
 
     //region Shared API Variables
@@ -209,11 +209,11 @@ data class Media(
      * Used for equality operators in RecyclerView adapters.
      */
     fun describeDrawableContents(): String {
-        return "$posterPath, $mediaTitle, ${getConciseOverview()}, $isSaved"
+        return "$posterPath, $mediaTitle, ${getConciseOverview()}, $isFavourite"
     }
 
     /**
-     * Shortens the Media overview for use in Discover and Saved feeds.
+     * Shortens the Media overview for use in Discover and Favourites feeds.
      */
     fun getConciseOverview(): String {
         var overviewSubString = overview?.substringBefore(".")

@@ -22,7 +22,7 @@ class MediaRepository(private val context: Context) : BaseRepository() {
 
     val popularMoviesList = mediaDao.popularMoviesList
     val popularShowsList = mediaDao.popularShowsList
-    val savedMediaList = mediaDao.savedMediaResults
+    val favouritesList = mediaDao.favouritesList
 
     /**
      * Updates the local database by making a call to TMDb's Discover endpoint and inserting the
@@ -57,7 +57,7 @@ class MediaRepository(private val context: Context) : BaseRepository() {
     /**
      * Fetch a Media object's full details and update the local database.
      */
-    suspend fun saveMedia(media: Media) {
+    suspend fun favouriteMedia(media: Media) {
         //TODO (Localisation): Localise detailsService error messages
         val detailsResponse: ApiResult<Media> = if (media.isMovie) {
             safeApiCall(
@@ -74,9 +74,9 @@ class MediaRepository(private val context: Context) : BaseRepository() {
         //TODO (UX): Use JobScheduler to try save Show again
         when (detailsResponse) {
             is ApiResult.Success -> {
-                val fullMedia = detailsResponse.data
-                fullMedia.isSaved = true
-                AppDatabase.getAppDatabase(context).mediaDao().update(fullMedia)
+                val completedMedia = detailsResponse.data
+                completedMedia.isFavourite = true
+                AppDatabase.getAppDatabase(context).mediaDao().update(completedMedia)
             }
             is ApiResult.Error -> {
                 throw detailsResponse.exception
@@ -84,8 +84,8 @@ class MediaRepository(private val context: Context) : BaseRepository() {
         }
     }
 
-    suspend fun unsaveMedia(media: Media) {
-        media.isSaved = false
+    suspend fun unfavouriteMedia(media: Media) {
+        media.isFavourite = false
         AppDatabase.getAppDatabase(context).mediaDao().update(media)
     }
 

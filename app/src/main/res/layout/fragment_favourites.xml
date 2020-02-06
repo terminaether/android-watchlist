@@ -14,7 +14,7 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="@string/navigation_bar_saved_title" />
+            app:title="@string/navigation_bar_favourites_title" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
