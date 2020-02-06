@@ -25,10 +25,10 @@ class MediaListAdapter(private val mediaSaveListener: MediaSaveListener) :
     ListAdapter<Media, MediaListAdapter.MediaViewHolder>(MediaDiffCallback()) {
 
     companion object {
-        const val PAYLOAD_KEY_POSTER_PATH_CHANGED = "posterPath"
-        const val PAYLOAD_KEY_MEDIA_TITLE_CHANGED = "mediaTitle"
-        const val PAYLOAD_KEY_CONCISE_OVERVIEW_CHANGED = "conciseOverview"
-        const val PAYLOAD_KEY_SAVE_STATE_CHANGED = "hasSaveStateChanged"
+        const val PAYLOAD_KEY_POSTER_PATH_CHANGED = "posterPathChanged"
+        const val PAYLOAD_KEY_MEDIA_TITLE_CHANGED = "mediaTitleChanged"
+        const val PAYLOAD_KEY_CONCISE_OVERVIEW_CHANGED = "conciseOverviewChanged"
+        const val PAYLOAD_KEY_SAVE_STATE_CHANGED = "saveStateChanged"
     }
 
     interface MediaSaveListener {
