@@ -81,9 +81,9 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val tabText = tab!!.text
                 if (tabText == getString(R.string.tab_item_movies)) {
-                    discoverViewModel.refreshDiscoverResults(true)
+                    discoverViewModel.refreshDiscoverFeed(true)
                 } else if (tabText == getString(R.string.tab_item_shows)) {
-                    discoverViewModel.refreshDiscoverResults(false)
+                    discoverViewModel.refreshDiscoverFeed(false)
                 }
             }
         })
@@ -110,7 +110,7 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
             })
 
         //Refresh the contents of the database when the app starts
-        discoverViewModel.refreshDiscoverResults(true)
+        discoverViewModel.refreshDiscoverFeed(true)
     }
 
     override fun onListItemSaveClick(media: Media) {

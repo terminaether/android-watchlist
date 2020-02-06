@@ -12,7 +12,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 /**
- * ViewModel to store and manage Discover, loading and error data.
+ * ViewModel to store and manage Discover data, loading states and any associated errors.
  *
  * Created by terminaether on 2020-01-06.
  */
@@ -56,7 +56,7 @@ class DiscoverViewModel @Inject constructor(
      * Sets the source of media being observed before launching a data refresh via an API call.
      * This method also handles updating loading status and error messages.
      */
-    fun refreshDiscoverResults(discoverMovies: Boolean) {
+    fun refreshDiscoverFeed(discoverMovies: Boolean) {
         isObservingMovies = discoverMovies
         viewModelScope.launch {
             try {
