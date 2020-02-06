@@ -25,6 +25,7 @@ class MediaRepository(private val context: Context) : BaseRepository() {
 
     val discoverMovieList = mediaDao.discoverMovieResults
     val discoverShowList = mediaDao.discoverShowResults
+    val savedMediaList = mediaDao.savedMediaResults
 
     /**
      * Updates the local database by making a call to TMDb's Discover endpoint.

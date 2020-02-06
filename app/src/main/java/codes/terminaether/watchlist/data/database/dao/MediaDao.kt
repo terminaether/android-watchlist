@@ -24,6 +24,9 @@ interface MediaDao {
     @get:Query("SELECT id FROM Media WHERE isSaved = 1")
     val savedMediaIds: List<Int>
 
+    @get:Query("SELECT * FROM Media WHERE isSaved = 1")
+    val savedMediaResults: LiveData<List<Media>>
+
     //TODO (Database): Find a way of simplifying this method
     @Transaction
     suspend fun upsertAll(media: List<Media>) {
