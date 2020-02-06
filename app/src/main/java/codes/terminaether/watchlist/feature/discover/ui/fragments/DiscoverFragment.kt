@@ -114,7 +114,7 @@ class DiscoverFragment : Fragment(), MediaListAdapter.MediaSaveListener {
     }
 
     override fun onListItemSaveClick(media: Media) {
-        discoverViewModel.toggleMediaSaved(media)
+        discoverViewModel.toggleMediaSaveState(media)
     }
 
     private fun handleDiscoverData(mediaList: List<Media>, isMovieList: Boolean) {

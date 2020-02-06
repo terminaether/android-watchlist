@@ -70,7 +70,7 @@ class DiscoverViewModel @Inject constructor(
         }
     }
 
-    fun toggleMediaSaved(media: Media) {
+    fun toggleMediaSaveState(media: Media) {
         viewModelScope.launch {
             when {
                 media.isSaved -> MediaRepository(getApplication()).unsaveMedia(media)
