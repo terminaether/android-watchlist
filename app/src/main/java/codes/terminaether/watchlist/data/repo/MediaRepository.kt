@@ -36,12 +36,12 @@ class MediaRepository(private val context: Context) : BaseRepository() {
         val discoverResponse: ApiResult<DiscoverResponse<Media>> = if (discoverMovies) {
             safeApiCall(
                 call = { discoverService.discoverMovies().await() },
-                errorMessage = "Error Discovering Movies"
+                errorMessage = "Unable to refresh popular movies"
             )
         } else {
             safeApiCall(
                 call = { discoverService.discoverShows().await() },
-                errorMessage = "Error Discovering Shows"
+                errorMessage = "Unable to refresh popular shows"
             )
         }
 
@@ -64,12 +64,12 @@ class MediaRepository(private val context: Context) : BaseRepository() {
         val detailsResponse: ApiResult<Media> = if (media.isMovie) {
             safeApiCall(
                 call = { detailsService.getMovieDetails(media.id).await() },
-                errorMessage = "Error Getting Details for Movie"
+                errorMessage = "Unable to get details for ${media.title}"
             )
         } else {
             safeApiCall(
                 call = { detailsService.getShowDetails(media.id).await() },
-                errorMessage = "Error Getting Details for Show"
+                errorMessage = "Unable to get details for ${media.name}"
             )
         }
 
